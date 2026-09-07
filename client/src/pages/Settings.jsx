@@ -13,7 +13,7 @@ import {
 import Header from '../components/Header';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function Settings() {
+export default function Settings({ onToggleSidebar }) {
   const { t } = useLanguage();
   const [settings, setSettings] = useState({
     shop_name: '',
@@ -24,7 +24,7 @@ export default function Settings() {
     default_payment_mode: 'upi',
     default_brand_atta: 'Aashirvaad Superior MP Atta 5kg',
     default_brand_oil: 'Fortune Sunlite Sunflower Oil 1L',
-    invoice_prefix: 'SLK-2026-',
+    invoice_prefix: 'NEB-2026-',
     invoice_footer_note: ''
   });
 
@@ -37,7 +37,7 @@ export default function Settings() {
     try {
       setLoading(true);
       const res = await axios.get('/api/settings');
-      setSettings(prev => ({ ...prev, ...res.data }));
+      setSettings((prev) => ({ ...prev, ...res.data }));
     } catch (err) {
       console.error(err);
     } finally {
@@ -51,7 +51,7 @@ export default function Settings() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSettings(prev => ({ ...prev, [name]: value }));
+    setSettings((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -70,188 +70,223 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
-      <Header title={t('set_title')} subtitle={t('set_subtitle')} />
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FAFAF7]">
+      <Header
+        title="Store Settings & Configuration"
+        subtitle="Configure shop branding, GSTIN details, invoice headers, and POS counter preferences"
+        onToggleSidebar={onToggleSidebar}
+      />
 
-      <main className="flex-1 p-6 max-w-4xl mx-auto w-full space-y-6">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-6">
         {saveSuccess && (
-          <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-2">
-            <CheckCircle className="w-5 h-5 text-emerald-600" />
+          <div className="p-4 bg-[#F0FDF4] border border-[#BBF7D0] text-[#14532D] rounded-2xl text-xs sm:text-sm font-semibold flex items-center space-x-2 shadow-xs">
+            <CheckCircle className="w-5 h-5 text-[#22C55E]" />
             <span>Store preferences and GST tax invoice details saved successfully!</span>
           </div>
         )}
 
         {error && (
-          <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs sm:text-sm">
+          <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl text-xs sm:text-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Shop & GST Information */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-            <div className="flex items-center space-x-2.5 pb-3 border-b border-slate-100">
-              <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
-                <Store className="w-4 h-4" />
+          <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-6 space-y-4">
+            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E5E7E2]">
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#14532D] flex items-center justify-center font-bold">
+                <Store className="w-4 h-4 text-[#22C55E]" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Shop Identity & Tax Information</h3>
-                <p className="text-xs text-slate-500">These details appear directly on official GST Tax Invoices</p>
+                <h3 className="font-bold text-[#172018] text-sm sm:text-base">
+                  Shop Identity & Tax Information
+                </h3>
+                <p className="text-xs text-[#647067]">
+                  These details appear directly on official GST Tax Invoices
+                </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="sm:col-span-2">
-                <label className="block font-semibold text-slate-700 mb-1">Store / Business Name *</label>
+              <div>
+                <label className="block font-bold text-[#172018] mb-1">
+                  Store Legal Name (as registered on GST)
+                </label>
                 <input
                   type="text"
                   name="shop_name"
-                  required
                   value={settings.shop_name}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-900 text-sm focus:ring-2 focus:ring-orange-500/20"
+                  placeholder="e.g. NEBULA Supermarket"
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-bold focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">GSTIN (Goods & Service Tax Number) *</label>
+                <label className="block font-bold text-[#172018] mb-1">GSTIN (15 Digits)</label>
                 <input
                   type="text"
                   name="shop_gstin"
-                  required
                   value={settings.shop_gstin}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono uppercase font-bold text-slate-800"
+                  placeholder="e.g. 29AAAAA0000A1Z5"
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-mono font-bold uppercase focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">State & State Code *</label>
-                <input
-                  type="text"
-                  name="shop_state_code"
-                  value={settings.shop_state_code}
-                  onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block font-semibold text-slate-700 mb-1">Shop Address</label>
-                <input
-                  type="text"
-                  name="shop_address"
-                  value={settings.shop_address}
-                  onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block font-semibold text-slate-700 mb-1">Contact Phone Numbers</label>
+                <label className="block font-bold text-[#172018] mb-1">Contact Phone</label>
                 <input
                   type="text"
                   name="shop_phone"
                   value={settings.shop_phone}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
+                  placeholder="e.g. +91 98450 12345"
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#172018] mb-1">
+                  POS State & Code
+                </label>
+                <input
+                  type="text"
+                  name="shop_state_code"
+                  value={settings.shop_state_code}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block font-bold text-[#172018] mb-1">
+                  Store Physical Address
+                </label>
+                <textarea
+                  name="shop_address"
+                  rows={2}
+                  value={settings.shop_address}
+                  onChange={handleChange}
+                  placeholder="Shop number, street, area, city, pincode..."
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
                 />
               </div>
             </div>
           </div>
 
-          {/* Section 2: Store Operational Defaults */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-            <div className="flex items-center space-x-2.5 pb-3 border-b border-slate-100">
-              <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
-                <Sliders className="w-4 h-4" />
+          {/* Section 2: Counter & POS Defaults */}
+          <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-6 space-y-4">
+            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E5E7E2]">
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#14532D] flex items-center justify-center font-bold">
+                <Sliders className="w-4 h-4 text-[#22C55E]" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Billing Defaults & Brand Preferences</h3>
-                <p className="text-xs text-slate-500">Preset preferences to accelerate counter operations</p>
+                <h3 className="font-bold text-[#172018] text-sm sm:text-base">
+                  Billing Counter Preferences
+                </h3>
+                <p className="text-xs text-[#647067]">
+                  Speed up cashier workflows by configuring default behaviors
+                </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Default Counter Payment Mode</label>
+                <label className="block font-bold text-[#172018] mb-1">
+                  Default POS Payment Mode
+                </label>
                 <select
                   name="default_payment_mode"
                   value={settings.default_payment_mode}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold"
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-bold"
                 >
-                  <option value="upi">UPI (PhonePe, Google Pay, Paytm)</option>
                   <option value="cash">Cash</option>
-                  <option value="card">Card / EDC POS</option>
+                  <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
+                  <option value="card">Debit / Credit Card</option>
                   <option value="khata">Khata (Customer Credit)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Default Atta Brand SKU</label>
-                <input
-                  type="text"
-                  name="default_brand_atta"
-                  value={settings.default_brand_atta}
-                  onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Default Cooking Oil Brand SKU</label>
-                <input
-                  type="text"
-                  name="default_brand_oil"
-                  value={settings.default_brand_oil}
-                  onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Invoice Number Prefix</label>
+                <label className="block font-bold text-[#172018] mb-1">Invoice Number Prefix</label>
                 <input
                   type="text"
                   name="invoice_prefix"
                   value={settings.invoice_prefix}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono uppercase"
+                  placeholder="e.g. NEB-2026-"
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-mono font-bold"
                 />
               </div>
 
-              <div className="sm:col-span-2">
-                <label className="block font-semibold text-slate-700 mb-1">Invoice Footer / Return Policy Note</label>
-                <textarea
-                  rows="2"
-                  name="invoice_footer_note"
-                  value={settings.invoice_footer_note}
+              <div>
+                <label className="block font-bold text-[#172018] mb-1">
+                  Default Brand for Atta
+                </label>
+                <input
+                  type="text"
+                  name="default_brand_atta"
+                  value={settings.default_brand_atta}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium"
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#172018] mb-1">
+                  Default Brand for Cooking Oil
+                </label>
+                <input
+                  type="text"
+                  name="default_brand_oil"
+                  value={settings.default_brand_oil}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018]"
                 />
               </div>
             </div>
           </div>
 
-          {/* Submit Action */}
+          {/* Section 3: Tax Invoice Footer Note */}
+          <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-6 space-y-4">
+            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E5E7E2]">
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#14532D] flex items-center justify-center font-bold">
+                <FileText className="w-4 h-4 text-[#22C55E]" />
+              </div>
+              <div>
+                <h3 className="font-bold text-[#172018] text-sm sm:text-base">
+                  Tax Invoice Footer Note
+                </h3>
+                <p className="text-xs text-[#647067]">
+                  Terms and return policies printed on the bottom of customer receipts
+                </p>
+              </div>
+            </div>
+
+            <div className="text-xs">
+              <textarea
+                name="invoice_footer_note"
+                rows={2}
+                value={settings.invoice_footer_note}
+                onChange={handleChange}
+                placeholder="Thank you for shopping with NEBULA Supermarket! Goods once sold can be exchanged within 48 hours."
+                className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+              />
+            </div>
+          </div>
+
+          {/* Submit CTA */}
           <div className="flex justify-end">
             <button
               type="submit"
               disabled={saving}
-              className="bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white font-extrabold px-6 py-2.5 rounded-xl shadow-md shadow-orange-500/25 flex items-center space-x-2 text-sm transition active:scale-95"
+              className="px-6 py-3 bg-[#14532D] hover:bg-[#166534] text-white font-bold rounded-xl shadow-xs transition active:scale-95 flex items-center space-x-2 text-xs sm:text-sm cursor-pointer"
             >
-              {saving ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Saving Changes...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  <span>Save Store Settings</span>
-                </>
-              )}
+              <Save className="w-4 h-4 text-[#22C55E]" />
+              <span>{saving ? 'Saving...' : 'Save Store Settings'}</span>
             </button>
           </div>
         </form>

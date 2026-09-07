@@ -15,14 +15,15 @@ import {
 } from 'lucide-react';
 import Header from '../components/Header';
 import { useLanguage } from '../context/LanguageContext';
+import BrandLogo from '../components/BrandLogo';
 
-export default function AgentChat() {
+export default function AgentChat({ onToggleSidebar }) {
   const { t } = useLanguage();
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'bot',
-      text: 'Namaste Rajesh bhai! I am your Nebula Supermarket Ops Agent. You can manage stock, cut bills, check Khata, or pull reports in plain shopkeeper English.\n\nTry clicking any sample prompt below or type your own.',
+      text: 'Namaste Rajesh! I am NEBULA AI, your smart store assistant. You can check stock, cut counter bills, inspect Khata balances, or generate sales reports in plain shopkeeper English.\n\nTap any suggested prompt below or type your request.',
       documents: []
     }
   ]);
@@ -30,18 +31,34 @@ export default function AgentChat() {
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const samplePrompts = [
+  const suggestedCards = [
+    {
+      title: 'What should I restock today?',
+      desc: 'Check low-stock SKUs and imminent stockouts'
+    },
+    {
+      title: 'Which products are selling fastest?',
+      desc: 'View top revenue & sales velocity items'
+    },
+    {
+      title: "Show today's sales summary.",
+      desc: 'Today revenue, bills count & payment breakdown'
+    },
+    {
+      title: 'Who has the highest Khata balance?',
+      desc: 'Top outstanding customer dues ledger'
+    }
+  ];
+
+  const quickPrompts = [
     'make a bill: 2kg sugar, 1 Aashirvaad atta 5kg, 4 Maggi, UPI',
     'drop the sugar, make it 6 Maggi',
     'finalize bill with UPI',
     '50 packets of Maggi came in, cost ₹12, MRP ₹14',
     'how much sugar is left?',
-    "what's running out?",
     "Ramesh's balance?",
-    'Ramesh paid ₹300',
     'send me that bill as a PDF',
-    "make this week's sales analysis deck",
-    "today's sales?"
+    "make this week's sales analysis deck"
   ];
 
   const scrollToBottom = () => {
@@ -57,7 +74,7 @@ export default function AgentChat() {
     if (!text || sending) return;
 
     const userMsgId = Date.now();
-    setMessages(prev => [...prev, { id: userMsgId, sender: 'user', text }]);
+    setMessages((prev) => [...prev, { id: userMsgId, sender: 'user', text }]);
     setInput('');
     setSending(true);
 
@@ -67,7 +84,7 @@ export default function AgentChat() {
         chat_id: 'web-browser-user'
       });
 
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
@@ -77,12 +94,14 @@ export default function AgentChat() {
         }
       ]);
     } catch (err) {
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           sender: 'bot',
-          text: `⚠️ Error: ${err.response?.data?.error || err.message || 'Could not connect to agent'}`,
+          text: `⚠️ Error: ${
+            err.response?.data?.error || err.message || 'Could not connect to store agent'
+          }`,
           documents: []
         }
       ]);
@@ -99,154 +118,155 @@ export default function AgentChat() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FAFAF7]">
       <Header
-        title={t('agent_title')}
-        subtitle={t('agent_subtitle')}
+        title="NEBULA AI Store Assistant"
+        subtitle="Conversational supermarket operations, instant billing, stock alerts & Khata queries"
+        onToggleSidebar={onToggleSidebar}
       />
 
       <main className="flex-1 p-4 sm:p-6 max-w-5xl mx-auto w-full flex flex-col space-y-4">
-        {/* Telegram Live Connection Info Banner */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3 shadow-md border border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center font-bold text-white shadow-md">
-              <Bot className="w-6 h-6" />
+        {/* Brand Banner Card */}
+        <div className="bg-white rounded-2xl border border-[#E5E7E2] p-4 sm:p-5 shadow-xs flex items-center justify-between gap-4">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-11 h-11 rounded-xl bg-[#F0FDF4] border border-[#BBF7D0] flex items-center justify-center text-[#14532D]">
+              <Sparkles className="w-6 h-6 text-[#22C55E]" />
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <span className="font-bold text-sm sm:text-base">Nebula Supermarket Telegram Agent</span>
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">
-                  Live Engine Active
+              <div className="flex items-center gap-2">
+                <h2 className="font-black text-base text-[#172018]">NEBULA AI</h2>
+                <span className="text-[10px] font-bold text-[#14532D] bg-[#F0FDF4] px-2 py-0.5 rounded-full border border-[#BBF7D0]">
+                  Online • Store Munimji
                 </span>
               </div>
-              <p className="text-xs text-slate-300">
-                You can interact with the agent right here in your browser, or message your bot on the Telegram app!
-              </p>
+              <p className="text-xs text-[#647067]">Your smart store assistant.</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs">
-            <span className="text-slate-400">Telegram Bot token setup:</span>
-            <code className="bg-slate-950 px-2.5 py-1 rounded-lg text-orange-400 font-mono text-[11px]">
-              bot/.env
-            </code>
+          <div className="hidden sm:flex items-center text-xs text-[#647067]">
+            <span>100% Real-time Store Database Grounded</span>
           </div>
         </div>
 
-        {/* Chat Window */}
-        <div className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[520px] overflow-hidden">
-          {/* Chat Messages Log */}
-          <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 bg-slate-50/50">
-            {messages.map((m) => {
-              const isUser = m.sender === 'user';
-              return (
-                <div
-                  key={m.id}
-                  className={`flex items-start space-x-2.5 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`}
-                >
-                  <div
-                    className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold shadow-sm ${
-                      isUser
-                        ? 'bg-orange-600 text-white'
-                        : 'bg-slate-900 text-orange-400 border border-slate-700'
-                    }`}
-                  >
-                    {isUser ? 'ME' : <Bot className="w-4 h-4" />}
-                  </div>
-
-                  <div
-                    className={`max-w-lg rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed shadow-sm ${
-                      isUser
-                        ? 'bg-orange-600 text-white rounded-tr-none'
-                        : 'bg-white text-slate-800 border border-slate-200 rounded-tl-none'
-                    }`}
-                  >
-                    <p className="whitespace-pre-line">{m.text}</p>
-
-                    {/* Document downloads if generated */}
-                    {m.documents && m.documents.length > 0 && (
-                      <div className="mt-3 pt-2.5 border-t border-slate-100 space-y-2">
-                        {m.documents.map((doc, idx) => (
-                          <div
-                            key={idx}
-                            className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-3 text-slate-900"
-                          >
-                            <div className="flex items-center space-x-2 truncate">
-                              {doc.type === 'pdf' ? (
-                                <FileText className="w-5 h-5 text-red-500 flex-shrink-0" />
-                              ) : (
-                                <Presentation className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                              )}
-                              <span className="font-bold text-xs truncate">{doc.caption || doc.filename}</span>
-                            </div>
-                            <a
-                              href={doc.downloadUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold flex items-center space-x-1 flex-shrink-0 shadow transition"
-                            >
-                              <Download className="w-3.5 h-3.5" />
-                              <span>Download</span>
-                            </a>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-            {sending && (
-              <div className="flex items-start space-x-2.5">
-                <div className="w-8 h-8 rounded-xl bg-slate-900 text-orange-400 flex items-center justify-center flex-shrink-0 text-xs font-bold">
-                  <Bot className="w-4 h-4" />
-                </div>
-                <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-3 text-xs text-slate-500 flex items-center space-x-2">
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-orange-600" />
-                  <span>Agent reasoning & orchestrating store tools...</span>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Quick Prompt Pills */}
-          <div className="p-2.5 bg-slate-100/70 border-t border-slate-200 flex items-center space-x-2 overflow-x-auto text-[11px]">
-            <span className="font-bold text-slate-400 uppercase text-[10px] pl-1 whitespace-nowrap">
-              Quick Test:
-            </span>
-            {samplePrompts.map((prompt, i) => (
-              <button
-                key={i}
-                onClick={() => handleSend(prompt)}
-                disabled={sending}
-                className="px-2.5 py-1 bg-white hover:bg-orange-50 hover:text-orange-700 hover:border-orange-300 border border-slate-200 rounded-lg whitespace-nowrap text-slate-700 font-medium transition active:scale-95 shadow-2xs"
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
-
-          {/* Input Bar */}
-          <div className="p-3 bg-white border-t border-slate-200 flex items-center space-x-2">
-            <input
-              type="text"
-              placeholder="Ask the agent anything in shopkeeper English..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={sending}
-              className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition font-medium"
-            />
+        {/* Suggested Prompt Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {suggestedCards.map((card, idx) => (
             <button
-              onClick={() => handleSend()}
-              disabled={sending || !input.trim()}
-              className="px-4 py-2.5 bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white font-bold rounded-xl text-xs sm:text-sm flex items-center space-x-1.5 shadow transition active:scale-95"
+              key={idx}
+              onClick={() => handleSend(card.title)}
+              className="p-3 bg-white hover:bg-[#F0FDF4] border border-[#E5E7E2] hover:border-[#BBF7D0] rounded-xl text-left transition cursor-pointer group shadow-xs active:scale-98"
             >
-              <Send className="w-4 h-4" />
-              <span className="hidden sm:inline">Send</span>
+              <p className="font-bold text-xs text-[#172018] group-hover:text-[#14532D] transition">
+                "{card.title}"
+              </p>
+              <p className="text-[10px] text-[#647067] mt-1">{card.desc}</p>
             </button>
-          </div>
+          ))}
+        </div>
+
+        {/* Chat History Box */}
+        <div className="flex-1 bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-4 sm:p-6 overflow-y-auto max-h-[calc(100vh-420px)] min-h-[360px] space-y-4">
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`flex items-start space-x-3 ${
+                msg.sender === 'user' ? 'justify-end' : 'justify-start'
+              }`}
+            >
+              {msg.sender === 'bot' && (
+                <div className="w-8 h-8 rounded-xl bg-[#14532D] text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Bot className="w-4 h-4 text-[#22C55E]" />
+                </div>
+              )}
+
+              <div
+                className={`max-w-xl rounded-2xl p-4 text-xs sm:text-sm space-y-2.5 ${
+                  msg.sender === 'user'
+                    ? 'bg-[#14532D] text-white font-medium rounded-tr-none shadow-xs'
+                    : 'bg-[#FAFAF7] border border-[#E5E7E2] text-[#172018] rounded-tl-none'
+                }`}
+              >
+                <div className="whitespace-pre-line leading-relaxed font-sans">{msg.text}</div>
+
+                {/* Attached Documents (PDFs / PPTX Decks) */}
+                {msg.documents && msg.documents.length > 0 && (
+                  <div className="space-y-2 pt-2 border-t border-[#E5E7E2]">
+                    <div className="text-[10px] font-bold text-[#647067] uppercase tracking-wider">
+                      Generated Documents:
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {msg.documents.map((doc, idx) => (
+                        <a
+                          key={idx}
+                          href={doc.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center space-x-2 px-3 py-1.5 bg-white hover:bg-[#F0FDF4] text-[#14532D] border border-[#BBF7D0] rounded-xl font-bold text-xs transition shadow-xs"
+                        >
+                          {doc.type === 'pdf' ? (
+                            <FileText className="w-4 h-4 text-[#F97316]" />
+                          ) : (
+                            <Presentation className="w-4 h-4 text-[#22C55E]" />
+                          )}
+                          <span>{doc.caption || doc.filename}</span>
+                          <Download className="w-3.5 h-3.5 ml-1" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {sending && (
+            <div className="flex items-start space-x-3">
+              <div className="w-8 h-8 rounded-xl bg-[#14532D] text-white flex items-center justify-center flex-shrink-0">
+                <RefreshCw className="w-4 h-4 animate-spin text-[#22C55E]" />
+              </div>
+              <div className="bg-[#FAFAF7] border border-[#E5E7E2] p-3 rounded-2xl rounded-tl-none text-xs text-[#647067] flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-ping"></span>
+                <span>NEBULA AI is processing your store instruction...</span>
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Quick Retail Phrases Carousel */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+          {quickPrompts.map((q, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSend(q)}
+              className="px-3 py-1 bg-white hover:bg-[#F0FDF4] text-[#647067] hover:text-[#14532D] border border-[#E5E7E2] hover:border-[#BBF7D0] rounded-xl font-medium whitespace-nowrap transition cursor-pointer active:scale-95"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+
+        {/* Input Bar */}
+        <div className="bg-white p-3 rounded-2xl border border-[#E5E7E2] shadow-xs flex items-center space-x-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={sending}
+            placeholder="Type your request (e.g., 'make a bill: 2kg sugar, 4 Maggi, UPI' or 'today sales')..."
+            className="flex-1 px-3 py-2 text-xs sm:text-sm bg-transparent outline-hidden text-[#172018] placeholder-[#647067]"
+          />
+
+          <button
+            onClick={() => handleSend()}
+            disabled={!input.trim() || sending}
+            className="px-4 py-2.5 bg-[#F97316] hover:bg-[#EA580C] disabled:opacity-40 text-white font-bold rounded-xl text-xs flex items-center space-x-1.5 shadow-xs transition active:scale-95 cursor-pointer"
+          >
+            <span>Send</span>
+            <Send className="w-3.5 h-3.5" />
+          </button>
         </div>
       </main>
     </div>

@@ -19,13 +19,14 @@ import {
   Send,
   Copy,
   Check,
-  ExternalLink
+  ExternalLink,
+  ShieldCheck
 } from 'lucide-react';
 import Header from '../components/Header';
 import { formatINR, formatDateTime } from '../utils/formatters';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function Khata() {
+export default function Khata({ onToggleSidebar }) {
   const { t } = useLanguage();
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +74,7 @@ export default function Khata() {
       });
       setCustomers(res.data);
       if (activeCustomer) {
-        const refreshed = res.data.find(c => c.id === activeCustomer.id);
+        const refreshed = res.data.find((c) => c.id === activeCustomer.id);
         if (refreshed) setActiveCustomer(refreshed);
       }
     } catch (err) {
@@ -102,11 +103,9 @@ export default function Khata() {
 
   const handleSendWa = async (rem, lang) => {
     try {
-      // Trigger audit update on server
       await axios.post(`/api/khata/customers/${rem.customer_id}/send-reminder`, {
         language: lang
       });
-      // Open WhatsApp link in new window
       const waUrl = rem.wa_links?.[lang];
       if (waUrl) {
         window.open(waUrl, '_blank');
@@ -153,7 +152,6 @@ export default function Khata() {
     setShowPaymentModal(true);
   };
 
-  // Submit payment
   const handlePaymentSubmit = async (e) => {
     e.preventDefault();
     if (!paymentForm.amount || Number(paymentForm.amount) <= 0) {
@@ -174,9 +172,14 @@ export default function Khata() {
     }
   };
 
-  // Settle full balance in one click
   const handleSettleBalance = async (cust) => {
-    if (!window.confirm(`Are you sure you want to mark the entire balance of ${formatINR(cust.khata_balance)} as settled for ${cust.name}?`)) {
+    if (
+      !window.confirm(
+        `Are you sure you want to mark the entire balance of ${formatINR(
+          cust.khata_balance
+        )} as settled for ${cust.name}?`
+      )
+    ) {
       return;
     }
 
@@ -193,7 +196,6 @@ export default function Khata() {
     }
   };
 
-  // Submit new customer
   const handleCustomerSubmit = async (e) => {
     e.preventDefault();
     if (!customerForm.name.trim()) {
@@ -214,59 +216,104 @@ export default function Khata() {
     }
   };
 
-  const totalOutstanding = customers.reduce((acc, c) => acc + (c.khata_balance > 0 ? c.khata_balance : 0), 0);
+  const totalOutstanding = customers.reduce(
+    (acc, c) => acc + (c.khata_balance > 0 ? c.khata_balance : 0),
+    0
+  );
+  const customersWithDues = customers.filter((c) => c.khata_balance > 0).length;
+  const settledCustomers = customers.filter((c) => c.khata_balance <= 0).length;
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
-      <Header title={t('khata_title')} subtitle={t('khata_subtitle')} />
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FAFAF7]">
+      <Header
+        title="Customer Khata Ledger"
+        subtitle="Trustworthy customer credit tracking, passbook ledger & payment settlement"
+        onToggleSidebar={onToggleSidebar}
+      />
 
-      <main className="flex-1 p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full">
-        {/* Total Outstanding Banner */}
-        <div className="bg-gradient-to-r from-amber-600 via-amber-700 to-orange-700 text-white p-5 rounded-2xl shadow-md flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center space-x-3.5">
-            <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center font-bold">
-              <Users className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-xs uppercase font-bold tracking-wider text-amber-200">
-                {t('khata_total_outstanding')}
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-5 max-w-7xl mx-auto w-full">
+        {/* KPI Financial Overview Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Card 1: Total Outstanding */}
+          <div className="bg-white rounded-2xl p-5 border border-[#E5E7E2] shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Total Outstanding
               </span>
-              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                {formatINR(totalOutstanding)}
+              <div className="w-8 h-8 rounded-xl bg-amber-50 text-[#F97316] flex items-center justify-center font-bold">
+                ₹
               </div>
             </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#B45309] tracking-tight">
+              {formatINR(totalOutstanding)}
+            </div>
+            <p className="text-xs text-[#647067] mt-2 pt-2 border-t border-[#E5E7E2]/60">
+              Total credit extended to customers
+            </p>
           </div>
 
-          <div className="flex items-center space-x-2.5">
+          {/* Card 2: Customers with Dues */}
+          <div className="bg-white rounded-2xl p-5 border border-[#E5E7E2] shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Customers with Dues
+              </span>
+              <div className="w-8 h-8 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                <Users className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#DC2626] tracking-tight">
+              {customersWithDues} <span className="text-base font-bold text-[#647067]">accounts</span>
+            </div>
+            <p className="text-xs text-[#647067] mt-2 pt-2 border-t border-[#E5E7E2]/60">
+              Active accounts with pending balances
+            </p>
+          </div>
+
+          {/* Card 3: Settled Accounts */}
+          <div className="bg-white rounded-2xl p-5 border border-[#E5E7E2] shadow-xs flex flex-col justify-between">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Settled / Clear
+              </span>
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#16A34A] flex items-center justify-center">
+                <CheckCircle className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#14532D] tracking-tight">
+              {settledCustomers} <span className="text-base font-bold text-[#647067]">accounts</span>
+            </div>
+            <p className="text-xs text-[#647067] mt-2 pt-2 border-t border-[#E5E7E2]/60">
+              Zero balance or settled accounts
+            </p>
+          </div>
+
+          {/* Card 4: Actions CTA Card */}
+          <div className="bg-white rounded-2xl p-4 border border-[#E5E7E2] shadow-xs flex flex-col justify-center gap-2">
             <button
-              onClick={handleOpenReminders}
-              className="bg-white/20 hover:bg-white/30 text-white font-bold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center space-x-1.5 shadow transition active:scale-95 border border-white/20"
+              onClick={() => setShowAddCustomerModal(true)}
+              className="w-full py-2.5 px-3 bg-[#F97316] hover:bg-[#EA580C] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center space-x-1.5 cursor-pointer"
             >
-              <Bell className="w-4 h-4 text-amber-200" />
-              <span>{t('khata_reminders_btn')}</span>
-              {customers.filter(c => c.khata_balance > 0).length > 0 && (
-                <span className="ml-1 bg-amber-400 text-amber-950 px-1.5 py-0.5 rounded-full text-[10px] font-extrabold">
-                  {customers.filter(c => c.khata_balance > 0).length}
-                </span>
-              )}
+              <Plus className="w-4 h-4 stroke-[2.5]" />
+              <span>+ Add Khata Customer</span>
             </button>
 
             <button
-              onClick={() => setShowAddCustomerModal(true)}
-              className="bg-white hover:bg-amber-50 text-amber-900 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center space-x-1.5 shadow transition active:scale-95"
+              onClick={handleOpenReminders}
+              className="w-full py-2 px-3 bg-[#FAFAF7] hover:bg-[#F0FDF4] text-[#14532D] border border-[#E5E7E2] hover:border-[#BBF7D0] font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
-              <span>{t('khata_add_customer')}</span>
+              <Bell className="w-3.5 h-3.5 text-[#F97316]" />
+              <span>WhatsApp Reminders ({customersWithDues})</span>
             </button>
           </div>
         </div>
 
         {/* Master-Detail Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* LEFT: Customers List (5 Cols) */}
-          <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* LEFT: Customers Directory List (5 Cols) */}
+          <div className="lg:col-span-5 bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-4 flex flex-col space-y-3">
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-[#647067] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search customer by name or phone..."
@@ -275,15 +322,17 @@ export default function Khata() {
                   setSearch(e.target.value);
                   fetchCustomers();
                 }}
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-orange-500/20"
+                className="w-full pl-9 pr-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden font-medium"
               />
             </div>
 
-            <div className="overflow-y-auto max-h-[calc(100vh-320px)] space-y-2">
+            <div className="overflow-y-auto max-h-[calc(100vh-360px)] space-y-2">
               {loading ? (
-                <div className="py-8 text-center text-slate-400 text-xs">Loading customers...</div>
+                <div className="py-10 text-center text-[#647067] text-xs font-semibold">
+                  Loading Khata directory...
+                </div>
               ) : customers.length === 0 ? (
-                <div className="py-8 text-center text-slate-400 text-xs">No customers found.</div>
+                <div className="py-10 text-center text-[#647067] text-xs">No customers found.</div>
               ) : (
                 customers.map((c) => {
                   const hasDue = c.khata_balance > 0;
@@ -295,26 +344,34 @@ export default function Khata() {
                       onClick={() => handleSelectCustomer(c)}
                       className={`p-3 rounded-xl border cursor-pointer transition flex items-center justify-between ${
                         isSelected
-                          ? 'border-orange-500 bg-orange-50/50 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                          ? 'border-[#14532D] bg-[#F0FDF4] shadow-xs ring-1 ring-[#14532D]'
+                          : 'border-[#E5E7E2] hover:border-[#14532D]/40 bg-white'
                       }`}
                     >
                       <div className="overflow-hidden pr-2">
-                        <div className="font-bold text-xs text-slate-900 truncate">{c.name}</div>
-                        <div className="text-[11px] text-slate-500 flex items-center space-x-1 mt-0.5">
-                          <Phone className="w-3 h-3 text-slate-400" />
+                        <div className="font-bold text-xs text-[#172018] truncate">{c.name}</div>
+                        <div className="text-[11px] text-[#647067] flex items-center space-x-1 mt-0.5">
+                          <Phone className="w-3 h-3 text-[#647067]" />
                           <span>{c.phone || 'No phone'}</span>
                         </div>
                       </div>
 
                       <div className="text-right flex-shrink-0">
-                        <div className={`text-xs font-extrabold ${hasDue ? 'text-amber-700' : 'text-emerald-700'}`}>
+                        <div
+                          className={`text-xs font-black ${
+                            hasDue ? 'text-[#B45309]' : 'text-[#16A34A]'
+                          }`}
+                        >
                           {formatINR(c.khata_balance)}
                         </div>
-                        <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
-                          hasDue ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
-                        }`}>
-                          {hasDue ? 'Due' : 'Clear'}
+                        <span
+                          className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                            hasDue
+                              ? 'bg-amber-100 text-[#B45309]'
+                              : 'bg-[#F0FDF4] text-[#16A34A] border border-[#BBF7D0]'
+                          }`}
+                        >
+                          {hasDue ? 'Due' : 'Settled'}
                         </span>
                       </div>
                     </div>
@@ -324,50 +381,40 @@ export default function Khata() {
             </div>
           </div>
 
-          {/* RIGHT: Selected Customer Ledger (7 Cols) */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+          {/* RIGHT: Selected Customer Ledger Passbook (7 Cols) */}
+          <div className="lg:col-span-7 bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-5 flex flex-col justify-between">
             {!activeCustomer ? (
-              <div className="flex-1 flex flex-col items-center justify-center py-16 text-center text-slate-400 space-y-2">
-                <Users className="w-10 h-10 stroke-1" />
-                <p className="text-xs">Select a customer from the left to view their detailed Khata transaction ledger.</p>
+              <div className="flex-1 flex flex-col items-center justify-center py-20 text-center text-[#647067] space-y-2">
+                <Users className="w-10 h-10 text-[#14532D]/40 stroke-1" />
+                <p className="text-xs font-medium">
+                  Select a customer from the left to view their detailed Khata transaction ledger.
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
                 {/* Active Customer Profile Header */}
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                <div className="p-4 bg-[#FAFAF7] rounded-xl border border-[#E5E7E2] flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base">{activeCustomer.name}</h3>
-                    <div className="text-xs text-slate-500 flex items-center space-x-3 mt-1">
+                    <h3 className="font-black text-[#172018] text-base">{activeCustomer.name}</h3>
+                    <div className="text-xs text-[#647067] flex items-center space-x-3 mt-0.5">
                       <span>Phone: {activeCustomer.phone || 'Not provided'}</span>
                       {activeCustomer.address && <span>• {activeCustomer.address}</span>}
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    {activeCustomer.khata_balance > 0 && (
-                      <button
-                        onClick={() => {
-                          fetchReminders();
-                          setShowRemindersModal(true);
-                        }}
-                        className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center space-x-1"
-                      >
-                        <Bell className="w-3.5 h-3.5" />
-                        <span>{t('khata_send_reminder')}</span>
-                      </button>
-                    )}
                     <button
                       onClick={() => handleOpenPayment(activeCustomer)}
-                      className="px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow transition"
+                      className="px-3.5 py-1.5 bg-[#F97316] hover:bg-[#EA580C] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer"
                     >
-                      {t('khata_record_payment')}
+                      + Record Payment
                     </button>
                     {activeCustomer.khata_balance > 0 && (
                       <button
                         onClick={() => handleSettleBalance(activeCustomer)}
-                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition"
+                        className="px-3.5 py-1.5 bg-[#14532D] hover:bg-[#166534] text-white font-bold text-xs rounded-xl transition cursor-pointer"
                       >
-                        {t('khata_settle_all')}
+                        Settle Balance
                       </button>
                     )}
                   </div>
@@ -375,47 +422,59 @@ export default function Khata() {
 
                 {/* Ledger Transactions Table */}
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                    Account Ledger & Passbook
+                  <h4 className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#647067] mb-2">
+                    Account Ledger & Passbook History
                   </h4>
 
-                  <div className="border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="border border-[#E5E7E2] rounded-xl overflow-hidden">
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px]">
+                      <thead className="bg-[#FAFAF7] border-b border-[#E5E7E2] text-[#647067] font-bold uppercase text-[10px]">
                         <tr>
                           <th className="p-2.5">Date</th>
-                          <th className="p-2.5">Type & Note</th>
+                          <th className="p-2.5">Type & Notes</th>
                           <th className="p-2.5 text-right">Credit (+)</th>
                           <th className="p-2.5 text-right">Payment (-)</th>
                           <th className="p-2.5 text-right">Balance After</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-[#E5E7E2]">
                         {loadingLedger ? (
                           <tr>
-                            <td colSpan="5" className="py-8 text-center text-slate-400">Loading ledger...</td>
+                            <td colSpan="5" className="py-8 text-center text-[#647067]">
+                              Loading passbook...
+                            </td>
                           </tr>
                         ) : customerLedger.length === 0 ? (
                           <tr>
-                            <td colSpan="5" className="py-8 text-center text-slate-400">No transactions recorded for this customer yet.</td>
+                            <td colSpan="5" className="py-8 text-center text-[#647067]">
+                              No transactions recorded for this customer yet.
+                            </td>
                           </tr>
                         ) : (
                           customerLedger.map((tx) => (
-                            <tr key={tx.id} className="hover:bg-slate-50/70 transition">
-                              <td className="p-2.5 text-slate-500">{formatDateTime(tx.created_at)}</td>
+                            <tr key={tx.id} className="hover:bg-[#FAFAF7] transition">
+                              <td className="p-2.5 text-[#647067] font-medium">
+                                {formatDateTime(tx.created_at)}
+                              </td>
                               <td className="p-2.5">
-                                <span className={`font-bold ${tx.type === 'credit' ? 'text-amber-700' : 'text-emerald-700'}`}>
+                                <span
+                                  className={`font-bold ${
+                                    tx.type === 'credit' ? 'text-[#B45309]' : 'text-[#16A34A]'
+                                  }`}
+                                >
                                   {tx.type === 'credit' ? 'Credit Purchase' : 'Payment Received'}
                                 </span>
-                                <p className="text-[11px] text-slate-400">{tx.notes || (tx.bill_number ? `Bill #${tx.bill_number}` : '-')}</p>
+                                <p className="text-[11px] text-[#647067]">
+                                  {tx.notes || (tx.bill_number ? `Bill #${tx.bill_number}` : '-')}
+                                </p>
                               </td>
-                              <td className="p-2.5 text-right font-bold text-amber-700">
+                              <td className="p-2.5 text-right font-bold text-[#B45309]">
                                 {tx.type === 'credit' ? formatINR(tx.amount) : '-'}
                               </td>
-                              <td className="p-2.5 text-right font-bold text-emerald-700">
+                              <td className="p-2.5 text-right font-bold text-[#16A34A]">
                                 {tx.type === 'payment' ? formatINR(tx.amount) : '-'}
                               </td>
-                              <td className="p-2.5 text-right font-extrabold text-slate-900">
+                              <td className="p-2.5 text-right font-black text-[#172018]">
                                 {formatINR(tx.balance_after)}
                               </td>
                             </tr>
@@ -432,77 +491,114 @@ export default function Khata() {
 
         {/* MODAL: Record Payment */}
         {showPaymentModal && activeCustomer && (
-          <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 border border-slate-200">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl shadow-card max-w-md w-full p-6 space-y-4 border border-[#E5E7E2]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E7E2]">
                 <div>
-                  <h3 className="font-bold text-slate-900 text-base">Record Khata Payment</h3>
-                  <p className="text-xs text-slate-500">Customer: {activeCustomer.name}</p>
+                  <h3 className="font-bold text-[#172018] text-base">Record Khata Payment</h3>
+                  <p className="text-xs text-[#647067]">Customer: {activeCustomer.name}</p>
                 </div>
-                <button onClick={() => setShowPaymentModal(false)} className="p-1 text-slate-400 hover:text-slate-600">
+                <button
+                  onClick={() => setShowPaymentModal(false)}
+                  className="p-1 text-[#647067] hover:text-[#172018] rounded-lg hover:bg-slate-100"
+                >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {formError && (
-                <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">{formError}</div>
+                <div className="p-2.5 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">
+                  {formError}
+                </div>
               )}
 
               <form onSubmit={handlePaymentSubmit} className="space-y-3 text-xs">
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex justify-between items-center">
-                  <span className="text-amber-800">Current Outstanding:</span>
-                  <span className="font-extrabold text-amber-900 text-sm">{formatINR(activeCustomer.khata_balance)}</span>
-                </div>
-
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Payment Amount Received (₹) *</label>
+                  <label className="block font-bold text-[#172018] mb-1">
+                    Payment Amount (₹) *
+                  </label>
                   <input
                     type="number"
-                    step="1"
+                    step="0.01"
                     required
-                    placeholder="e.g. 500"
                     value={paymentForm.amount}
                     onChange={(e) => setPaymentForm({ ...paymentForm, amount: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-bold text-sm"
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-sm font-black text-[#14532D]"
                   />
+                  <div className="flex justify-between text-[11px] text-[#647067] mt-1">
+                    <span>Outstanding: {formatINR(activeCustomer.khata_balance)}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPaymentForm({ ...paymentForm, amount: String(activeCustomer.khata_balance) })
+                      }
+                      className="text-[#14532D] font-bold hover:underline"
+                    >
+                      Fill Full Dues
+                    </button>
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Payment Mode</label>
-                  <select
-                    value={paymentForm.payment_mode}
-                    onChange={(e) => setPaymentForm({ ...paymentForm, payment_mode: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-medium"
-                  >
-                    <option value="upi">UPI (PhonePe / GPay / Paytm)</option>
-                    <option value="cash">Cash</option>
-                    <option value="card">Card / POS</option>
-                  </select>
+                  <label className="block font-bold text-[#172018] mb-1">Payment Mode</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'upi', label: 'UPI' },
+                      { id: 'cash', label: 'Cash' },
+                      { id: 'card', label: 'Card' }
+                    ].map((m) => (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => setPaymentForm({ ...paymentForm, payment_mode: m.id })}
+                        className={`py-2 rounded-xl font-bold border transition ${
+                          paymentForm.payment_mode === m.id
+                            ? 'bg-[#14532D] text-white border-[#14532D]'
+                            : 'bg-[#FAFAF7] text-[#647067] border-[#E5E7E2]'
+                        }`}
+                      >
+                        {m.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Reference / UTR / Note</label>
+                  <label className="block font-bold text-[#172018] mb-1">
+                    Payment Ref (UPI UTR or Bank Txn ID)
+                  </label>
                   <input
                     type="text"
-                    placeholder="e.g. Paid at shop counter / UTR 991823"
-                    value={paymentForm.notes}
-                    onChange={(e) => setPaymentForm({ ...paymentForm, notes: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl"
+                    value={paymentForm.payment_ref}
+                    onChange={(e) => setPaymentForm({ ...paymentForm, payment_ref: e.target.value })}
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018]"
+                    placeholder="e.g. UPI Ref # 349102"
                   />
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+                <div>
+                  <label className="block font-bold text-[#172018] mb-1">Notes</label>
+                  <input
+                    type="text"
+                    value={paymentForm.notes}
+                    onChange={(e) => setPaymentForm({ ...paymentForm, notes: e.target.value })}
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018]"
+                    placeholder="e.g. Paid in person at counter"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E5E7E2]">
                   <button
                     type="button"
                     onClick={() => setShowPaymentModal(false)}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl"
+                    className="px-4 py-2 bg-[#FAFAF7] text-[#172018] font-bold rounded-xl border border-[#E5E7E2]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow"
+                    className="px-5 py-2 bg-[#F97316] hover:bg-[#EA580C] text-white font-bold rounded-xl shadow-xs transition active:scale-95"
                   >
                     {submitting ? 'Recording...' : 'Confirm Payment'}
                   </button>
@@ -514,80 +610,88 @@ export default function Khata() {
 
         {/* MODAL: Add Customer */}
         {showAddCustomerModal && (
-          <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 border border-slate-200">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 className="font-bold text-slate-900 text-base">Add New Khata Customer</h3>
-                <button onClick={() => setShowAddCustomerModal(false)} className="p-1 text-slate-400 hover:text-slate-600">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl shadow-card max-w-md w-full p-6 space-y-4 border border-[#E5E7E2]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E7E2]">
+                <h3 className="font-black text-[#172018] text-base">Add New Khata Customer</h3>
+                <button
+                  onClick={() => setShowAddCustomerModal(false)}
+                  className="p-1 text-[#647067] hover:text-[#172018] rounded-lg hover:bg-slate-100"
+                >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {formError && (
-                <div className="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">{formError}</div>
+                <div className="p-2.5 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200">
+                  {formError}
+                </div>
               )}
 
               <form onSubmit={handleCustomerSubmit} className="space-y-3 text-xs">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Customer Full Name *</label>
+                  <label className="block font-bold text-[#172018] mb-1">Customer Full Name *</label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Ramesh Kumar"
                     value={customerForm.name}
                     onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-medium"
+                    placeholder="e.g. Ramesh Kumar"
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Phone Number (10 digits)</label>
+                  <label className="block font-bold text-[#172018] mb-1">Phone Number</label>
                   <input
                     type="text"
-                    placeholder="e.g. 9876543210"
                     value={customerForm.phone}
                     onChange={(e) => setCustomerForm({ ...customerForm, phone: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-mono"
+                    placeholder="e.g. 9876543210"
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Address / Landmark</label>
+                  <label className="block font-bold text-[#172018] mb-1">Address / Landmark</label>
                   <input
                     type="text"
-                    placeholder="e.g. 4th Cross, Gandhi Bazaar"
                     value={customerForm.address}
                     onChange={(e) => setCustomerForm({ ...customerForm, address: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl"
+                    placeholder="e.g. Flat 302, Green Avenue"
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018]"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Opening Credit Balance (₹)</label>
+                  <label className="block font-bold text-[#172018] mb-1">
+                    Opening Balance (₹) (Optional)
+                  </label>
                   <input
                     type="number"
-                    step="1"
-                    placeholder="0"
                     value={customerForm.initial_balance}
-                    onChange={(e) => setCustomerForm({ ...customerForm, initial_balance: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl"
+                    onChange={(e) =>
+                      setCustomerForm({ ...customerForm, initial_balance: e.target.value })
+                    }
+                    placeholder="0.00"
+                    className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-xs text-[#172018]"
                   />
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E5E7E2]">
                   <button
                     type="button"
                     onClick={() => setShowAddCustomerModal(false)}
-                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl"
+                    className="px-4 py-2 bg-[#FAFAF7] text-[#172018] font-bold rounded-xl border border-[#E5E7E2]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow"
+                    className="px-5 py-2 bg-[#14532D] hover:bg-[#166534] text-white font-bold rounded-xl shadow-xs transition active:scale-95"
                   >
-                    {submitting ? 'Saving...' : 'Add Customer'}
+                    {submitting ? 'Creating...' : '+ Create Khata Account'}
                   </button>
                 </div>
               </form>
@@ -595,175 +699,92 @@ export default function Khata() {
           </div>
         )}
 
-        {/* MODAL: Payment Reminders with Multi-Language WhatsApp & UPI */}
+        {/* MODAL: WhatsApp Reminders */}
         {showRemindersModal && (
-          <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 space-y-4 border border-slate-200 max-h-[90vh] flex flex-col">
-              {/* Modal Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 flex-shrink-0">
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <Bell className="w-5 h-5 text-amber-600" />
-                    <h3 className="font-bold text-slate-900 text-base">
-                      {t('khata_reminders_title')}
-                    </h3>
-                  </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    {t('khata_reminders_subtitle')}
-                  </p>
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl shadow-card max-w-2xl w-full p-6 space-y-4 border border-[#E5E7E2]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E7E2]">
+                <div className="flex items-center space-x-2">
+                  <Bell className="w-5 h-5 text-[#F97316]" />
+                  <h3 className="font-bold text-[#172018] text-base">WhatsApp Due Reminders</h3>
                 </div>
                 <button
                   onClick={() => setShowRemindersModal(false)}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                  className="p-1 text-[#647067] hover:text-[#172018] rounded-lg hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Language Selector for Reminders */}
-              <div className="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex-shrink-0">
-                <span className="text-xs font-semibold text-slate-700">
-                  {t('khata_msg_lang')}:
-                </span>
-                <div className="flex items-center space-x-1.5 text-xs">
+              {/* Language Switcher for WhatsApp message templates */}
+              <div className="flex items-center space-x-2 text-xs">
+                <span className="font-bold text-[#172018]">Template Language:</span>
+                {['en', 'hi', 'ta'].map((lang) => (
                   <button
-                    onClick={() => setReminderLang('en')}
-                    className={`px-3 py-1 rounded-lg font-bold transition ${
-                      reminderLang === 'en'
-                        ? 'bg-orange-600 text-white shadow-sm'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                    key={lang}
+                    onClick={() => setReminderLang(lang)}
+                    className={`px-2.5 py-1 rounded-lg font-bold uppercase transition ${
+                      reminderLang === lang
+                        ? 'bg-[#14532D] text-white'
+                        : 'bg-[#FAFAF7] text-[#647067] border border-[#E5E7E2]'
                     }`}
                   >
-                    English
+                    {lang === 'en' ? 'English' : lang === 'hi' ? 'हिंदी' : 'தமிழ்'}
                   </button>
-                  <button
-                    onClick={() => setReminderLang('hi')}
-                    className={`px-3 py-1 rounded-lg font-bold transition ${
-                      reminderLang === 'hi'
-                        ? 'bg-orange-600 text-white shadow-sm'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-                    }`}
-                  >
-                    हिन्दी
-                  </button>
-                  <button
-                    onClick={() => setReminderLang('ta')}
-                    className={`px-3 py-1 rounded-lg font-bold transition ${
-                      reminderLang === 'ta'
-                        ? 'bg-orange-600 text-white shadow-sm'
-                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-                    }`}
-                  >
-                    தமிழ்
-                  </button>
-                </div>
+                ))}
               </div>
 
-              {/* Debtors Reminders List */}
-              <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-                {loadingReminders ? (
-                  <div className="py-12 text-center text-slate-400 text-xs">
-                    Loading reminder list...
-                  </div>
-                ) : remindersData.length === 0 ? (
-                  <div className="py-12 text-center text-slate-500 text-xs">
-                    🎉 No customers have pending Khata balances right now!
-                  </div>
-                ) : (
-                  remindersData.map((rem) => {
-                    const message = rem.messages[reminderLang] || rem.messages.en;
-                    const hasPhone = !!rem.clean_phone;
-                    const key = `${rem.customer_id}_${reminderLang}`;
-                    const isCopied = copiedKey === key;
-
-                    return (
-                      <div
-                        key={rem.customer_id}
-                        className="p-4 rounded-xl border border-slate-200 bg-white hover:border-amber-300 transition space-y-2.5 shadow-sm"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <div>
-                            <span className="font-bold text-slate-900 text-sm">{rem.name}</span>
-                            <div className="text-[11px] text-slate-500 flex items-center space-x-2 mt-0.5">
-                              <span>📞 {rem.phone || 'No phone registered'}</span>
-                              <span>•</span>
-                              <span>
-                                {rem.last_reminder_at
-                                  ? `${t('khata_last_reminded')}: ${formatDateTime(rem.last_reminder_at)}`
-                                  : `${t('khata_last_reminded')}: ${t('khata_never_reminded')}`}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="text-right flex-shrink-0">
-                            <span className="font-extrabold text-amber-700 text-sm">
-                              {formatINR(rem.khata_balance)}
-                            </span>
-                            <div className="text-[9px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 text-center mt-0.5">
-                              Due
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Message Preview */}
-                        <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700 italic leading-relaxed">
-                          "{message}"
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex items-center justify-between pt-1 text-xs">
-                          <span className="text-[10px] text-slate-400 font-mono">
-                            UPI: {rem.upi_id}
+              {loadingReminders ? (
+                <div className="py-12 flex justify-center">
+                  <RefreshCw className="w-6 h-6 text-[#14532D] animate-spin" />
+                </div>
+              ) : remindersData.length === 0 ? (
+                <div className="py-12 text-center text-[#647067] text-xs">
+                  No customers currently have overdue Khata balances.
+                </div>
+              ) : (
+                <div className="max-h-72 overflow-y-auto space-y-3">
+                  {remindersData.map((r) => (
+                    <div
+                      key={r.customer_id}
+                      className="p-3 bg-[#FAFAF7] rounded-xl border border-[#E5E7E2] flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div>
+                        <div className="font-bold text-[#172018]">{r.name}</div>
+                        <div className="text-[11px] text-[#647067] flex items-center space-x-2 mt-0.5">
+                          <span>Phone: {r.phone}</span>
+                          <span>•</span>
+                          <span className="font-bold text-[#B45309]">
+                            Due: {formatINR(r.balance)}
                           </span>
-
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => handleCopy(message, key)}
-                              className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg flex items-center space-x-1 transition text-xs"
-                            >
-                              {isCopied ? (
-                                <>
-                                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                  <span className="text-emerald-700">{t('khata_copied')}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Copy className="w-3.5 h-3.5 text-slate-500" />
-                                  <span>{t('khata_copy_msg')}</span>
-                                </>
-                              )}
-                            </button>
-
-                            {hasPhone ? (
-                              <button
-                                onClick={() => handleSendWa(rem, reminderLang)}
-                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg flex items-center space-x-1 shadow transition text-xs active:scale-95"
-                              >
-                                <Send className="w-3.5 h-3.5" />
-                                <span>{t('khata_send_wa')}</span>
-                              </button>
-                            ) : (
-                              <span className="text-[11px] text-slate-400 italic">
-                                Add phone to enable WhatsApp
-                              </span>
-                            )}
-                          </div>
                         </div>
                       </div>
-                    );
-                  })
-                )}
-              </div>
 
-              {/* Modal Footer */}
-              <div className="pt-3 border-t border-slate-100 flex justify-end flex-shrink-0">
-                <button
-                  onClick={() => setShowRemindersModal(false)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs"
-                >
-                  {t('close')}
-                </button>
-              </div>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => handleCopy(r.templates[reminderLang], r.customer_id)}
+                          className="px-2.5 py-1.5 bg-white border border-[#E5E7E2] hover:bg-slate-50 text-[#647067] rounded-lg flex items-center space-x-1"
+                        >
+                          {copiedKey === r.customer_id ? (
+                            <Check className="w-3.5 h-3.5 text-[#16A34A]" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
+                          <span>Copy</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleSendWa(r, reminderLang)}
+                          className="px-3 py-1.5 bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold rounded-lg flex items-center space-x-1.5 shadow-xs transition"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          <span>WhatsApp</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

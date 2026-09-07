@@ -9,24 +9,22 @@ import {
   Tooltip,
   ResponsiveContainer,
   LineChart,
-  Line,
-  Legend
+  Line
 } from 'recharts';
 import {
   BarChart3,
-  Calendar,
   RefreshCw,
   TrendingUp,
   ShieldCheck,
   Package,
-  AlertTriangle,
-  IndianRupee
+  IndianRupee,
+  Download
 } from 'lucide-react';
 import Header from '../components/Header';
-import { formatINR, formatNumber } from '../utils/formatters';
+import { formatINR } from '../utils/formatters';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function Reports() {
+export default function Reports({ onToggleSidebar }) {
   const { t } = useLanguage();
   const [range, setRange] = useState('7d');
   const [data, setData] = useState(null);
@@ -53,220 +51,252 @@ export default function Reports() {
   const { salesTrend = [], topProducts = [], gstBreakup = [], stockHealth = {} } = data || {};
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
-      <Header title={t('rep_title')} subtitle={t('rep_subtitle')} />
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FAFAF7]">
+      <Header
+        title="Reports & Tax Intelligence"
+        subtitle="Visual analytics, GST collection reports for GSTR-1/3B & inventory capital valuation"
+        onToggleSidebar={onToggleSidebar}
+      />
 
-      <main className="flex-1 p-6 space-y-6 max-w-7xl mx-auto w-full">
-        {/* Filter Controls */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center space-x-2 text-xs font-semibold">
-            <span className="text-slate-500">Analysis Timeframe:</span>
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-5 max-w-7xl mx-auto w-full">
+        {/* Filter Controls & Deck Download */}
+        <div className="bg-white p-4 rounded-2xl border border-[#E5E7E2] shadow-xs flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center space-x-2 text-xs font-bold">
+            <span className="text-[#647067]">Analysis Timeframe:</span>
             {[
               { id: 'today', label: 'Today' },
               { id: '7d', label: 'Last 7 Days' },
               { id: '30d', label: 'Last 30 Days' },
               { id: '90d', label: 'Last 90 Days' }
-            ].map((t) => (
+            ].map((period) => (
               <button
-                key={t.id}
-                onClick={() => setRange(t.id)}
-                className={`px-3 py-1.5 rounded-xl transition ${
-                  range === t.id
-                    ? 'bg-slate-900 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                key={period.id}
+                onClick={() => setRange(period.id)}
+                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                  range === period.id
+                    ? 'bg-[#14532D] text-white shadow-xs'
+                    : 'bg-[#FAFAF7] text-[#647067] hover:bg-[#F0FDF4] hover:text-[#14532D] border border-[#E5E7E2]'
                 }`}
               >
-                {t.label}
+                {period.label}
               </button>
             ))}
           </div>
 
-          <button
-            onClick={fetchReports}
-            className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition"
-            title="Refresh Data"
-          >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
+          <div className="flex items-center space-x-2">
+            <a
+              href="/api/reports/deck"
+              download
+              className="px-3 py-2 bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#14532D] font-bold text-xs rounded-xl border border-[#BBF7D0] flex items-center space-x-1.5 shadow-xs transition"
+            >
+              <Download className="w-3.5 h-3.5 text-[#22C55E]" />
+              <span>Download Analysis Deck (.pptx)</span>
+            </a>
 
-        {/* Inventory Valuation & Health KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total SKUs</span>
-              <Package className="w-4 h-4 text-slate-400" />
-            </div>
-            <div className="text-2xl font-extrabold text-slate-900">{stockHealth.total_skus || 0}</div>
-            <div className="text-xs text-emerald-600 font-semibold mt-1">
-              {stockHealth.healthy_stock || 0} items well-stocked
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Inventory Cost</span>
-              <IndianRupee className="w-4 h-4 text-slate-400" />
-            </div>
-            <div className="text-2xl font-extrabold text-slate-900">
-              {formatINR(stockHealth.total_inventory_cost_value || 0)}
-            </div>
-            <div className="text-xs text-slate-500 mt-1">Capital tied in stock</div>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Retail Value (MRP)</span>
-              <TrendingUp className="w-4 h-4 text-slate-400" />
-            </div>
-            <div className="text-2xl font-extrabold text-emerald-700">
-              {formatINR(stockHealth.total_inventory_retail_value || 0)}
-            </div>
-            <div className="text-xs text-slate-500 mt-1">Expected retail realization</div>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Low Stock Needs</span>
-              <AlertTriangle className="w-4 h-4 text-rose-500" />
-            </div>
-            <div className="text-2xl font-extrabold text-rose-600">
-              {(stockHealth.low_stock || 0) + (stockHealth.out_of_stock || 0)}
-            </div>
-            <div className="text-xs text-rose-600 font-semibold mt-1">
-              {stockHealth.out_of_stock || 0} completely out of stock
-            </div>
+            <button
+              onClick={fetchReports}
+              className="p-2 bg-[#FAFAF7] hover:bg-slate-100 text-[#647067] rounded-xl border border-[#E5E7E2] transition cursor-pointer"
+              title="Refresh Data"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#14532D]' : ''}`} />
+            </button>
           </div>
         </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Chart 1: Daily Revenue Trend */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm sm:text-base">Sales Revenue & GST Trend</h3>
-              <p className="text-xs text-slate-500">Daily gross collection vs tax component</p>
+        {/* 4 KPI Cards: Valuation & Stock Capital */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-2xl border border-[#E5E7E2] shadow-xs">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Total SKUs
+              </span>
+              <Package className="w-4 h-4 text-[#14532D]" />
             </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#172018]">
+              {stockHealth.total_skus || 0}
+            </div>
+            <p className="text-xs text-[#647067] mt-1">Catalog items tracked</p>
+          </div>
 
-            <div className="h-72 w-full">
-              {salesTrend.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-slate-400 text-xs">
-                  No sales recorded in this period yet.
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={salesTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <XAxis dataKey="sale_date" tick={{ fontSize: 11, fill: '#64748b' }} />
-                    <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
-                    <Tooltip
-                      formatter={(val) => [formatINR(val), '']}
-                      contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
-                    />
-                    <Legend wrapperStyle={{ fontSize: '12px' }} />
-                    <Bar dataKey="total_sales" name="Sales (₹)" fill="#ea580c" radius={[6, 6, 0, 0]} />
-                    <Bar dataKey="total_gst" name="GST Tax (₹)" fill="#3b82f6" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+          <div className="bg-white p-5 rounded-2xl border border-[#E5E7E2] shadow-xs">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Stock Capital Cost
+              </span>
+              <IndianRupee className="w-4 h-4 text-[#647067]" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#172018]">
+              {formatINR(stockHealth.inventory_cost_value || 0)}
+            </div>
+            <p className="text-xs text-[#647067] mt-1">Total wholesale capital tied in inventory</p>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl border border-[#E5E7E2] shadow-xs">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Retail MRP Valuation
+              </span>
+              <TrendingUp className="w-4 h-4 text-[#14532D]" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#14532D]">
+              {formatINR(stockHealth.inventory_retail_value || 0)}
+            </div>
+            <p className="text-xs text-[#647067] mt-1">Potential retail sales realization</p>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl border border-[#E5E7E2] shadow-xs">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#647067]">
+                Potential Gross Margin
+              </span>
+              <span className="text-xs font-bold text-[#16A34A] bg-[#F0FDF4] px-1.5 py-0.5 rounded border border-[#BBF7D0]">
+                {stockHealth.inventory_retail_value > 0
+                  ? (
+                      ((stockHealth.inventory_retail_value - stockHealth.inventory_cost_value) /
+                        stockHealth.inventory_retail_value) *
+                      100
+                    ).toFixed(1)
+                  : 0}
+                %
+              </span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-[#16A34A]">
+              {formatINR(
+                (stockHealth.inventory_retail_value || 0) - (stockHealth.inventory_cost_value || 0)
               )}
             </div>
+            <p className="text-xs text-[#647067] mt-1">Expected gross trading profit</p>
+          </div>
+        </div>
+
+        {/* Charts: Sales Velocity & Top SKUs */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          {/* Sales Trend LineChart */}
+          <div className="bg-white p-5 rounded-2xl border border-[#E5E7E2] shadow-xs">
+            <h3 className="font-bold text-[#172018] text-sm mb-1">Sales Velocity Trend</h3>
+            <p className="text-xs text-[#647067] mb-4">Gross counter revenue timeline</p>
+
+            {salesTrend.length === 0 ? (
+              <div className="h-64 flex items-center justify-center text-[#647067] text-xs">
+                No sales records found for this period.
+              </div>
+            ) : (
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={salesTrend}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7E2" />
+                    <XAxis dataKey="date" stroke="#647067" fontSize={11} tickLine={false} />
+                    <YAxis stroke="#647067" fontSize={11} tickLine={false} />
+                    <Tooltip
+                      formatter={(val) => [formatINR(val), 'Revenue']}
+                      contentStyle={{
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '12px',
+                        borderColor: '#E5E7E2',
+                        fontSize: '12px'
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="sales"
+                      stroke="#14532D"
+                      strokeWidth={2.5}
+                      dot={{ fill: '#14532D', r: 4 }}
+                      activeDot={{ r: 6, fill: '#F97316' }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
           </div>
 
-          {/* Chart 2: Top Selling Products */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm sm:text-base">Top Selling Products</h3>
-              <p className="text-xs text-slate-500">Highest grossing SKUs in selected timeframe</p>
-            </div>
+          {/* Top Products BarChart */}
+          <div className="bg-white p-5 rounded-2xl border border-[#E5E7E2] shadow-xs">
+            <h3 className="font-bold text-[#172018] text-sm mb-1">Top Selling SKUs</h3>
+            <p className="text-xs text-[#647067] mb-4">Ranked by revenue contribution</p>
 
-            <div className="h-72 w-full">
-              {topProducts.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-slate-400 text-xs">
-                  No products sold in this period yet.
-                </div>
-              ) : (
+            {topProducts.length === 0 ? (
+              <div className="h-64 flex items-center justify-center text-[#647067] text-xs">
+                No product sales records found for this period.
+              </div>
+            ) : (
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    layout="vertical"
-                    data={topProducts.slice(0, 6)}
-                    margin={{ top: 10, right: 20, left: 40, bottom: 0 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                    <XAxis type="number" tick={{ fontSize: 11, fill: '#64748b' }} />
+                  <BarChart data={topProducts.slice(0, 6)} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7E2" />
+                    <XAxis type="number" stroke="#647067" fontSize={11} tickLine={false} />
                     <YAxis
                       dataKey="product_name"
                       type="category"
-                      width={100}
-                      tick={{ fontSize: 10, fill: '#334155' }}
+                      stroke="#647067"
+                      fontSize={10}
+                      width={90}
+                      tickLine={false}
                     />
                     <Tooltip
                       formatter={(val) => [formatINR(val), 'Revenue']}
-                      contentStyle={{ backgroundColor: '#0f172a', borderRadius: '12px', color: '#fff', fontSize: '12px' }}
+                      contentStyle={{
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '12px',
+                        borderColor: '#E5E7E2',
+                        fontSize: '12px'
+                      }}
                     />
-                    <Bar dataKey="total_revenue" fill="#10b981" radius={[0, 6, 6, 0]} />
+                    <Bar dataKey="total_revenue" fill="#22C55E" radius={[0, 6, 6, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* GST Tax Collection Slabs Table */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-bold text-slate-900 text-base">GST Tax Collection by Slab</h3>
-              <p className="text-xs text-slate-500">
-                Official intra-state 50-50 CGST and SGST split report for monthly/quarterly GSTR-1 & GSTR-3B filings
-              </p>
+        {/* GST Tax Collection Breakdown (GSTR-1 & GSTR-3B Compliant) */}
+        <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs overflow-hidden">
+          <div className="p-4 border-b border-[#E5E7E2] flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <ShieldCheck className="w-4 h-4 text-[#22C55E]" />
+              <h3 className="font-bold text-[#172018] text-sm">
+                GST Tax Collection Breakdown (GSTR-1 & GSTR-3B Filing Table)
+              </h3>
             </div>
-            <div className="flex items-center space-x-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>GSTR-1 Ready</span>
-            </div>
+            <span className="text-[11px] font-bold text-[#14532D] bg-[#F0FDF4] px-2.5 py-1 rounded-lg border border-[#BBF7D0]">
+              Intra-state CGST + SGST (50/50 Split)
+            </span>
           </div>
 
-          <div className="overflow-x-auto border border-slate-200 rounded-xl">
+          <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase text-[10px]">
+              <thead className="bg-[#FAFAF7] border-b border-[#E5E7E2] text-[#647067] font-bold uppercase text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">GST Rate Slab</th>
-                  <th className="py-3 px-3">Taxable Value (A)</th>
-                  <th className="py-3 px-3">CGST (Rate / 2)</th>
-                  <th className="py-3 px-3">SGST (Rate / 2)</th>
-                  <th className="py-3 px-3">Total Tax (CGST + SGST)</th>
-                  <th className="py-3 px-4 text-right">Gross Invoiced Value</th>
+                  <th className="py-3 px-4">GST Slab Rate</th>
+                  <th className="py-3 px-3 text-right">Taxable Turnover (₹)</th>
+                  <th className="py-3 px-3 text-right">CGST Collected (₹)</th>
+                  <th className="py-3 px-3 text-right">SGST Collected (₹)</th>
+                  <th className="py-3 px-4 text-right">Total GST (₹)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-[#E5E7E2]">
                 {gstBreakup.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="py-8 text-center text-slate-400">
-                      No GST records for this timeframe.
+                    <td colSpan="5" className="py-8 text-center text-[#647067]">
+                      No GST sales recorded in this period.
                     </td>
                   </tr>
                 ) : (
                   gstBreakup.map((row) => (
-                    <tr key={row.gst_slab} className="hover:bg-slate-50/70 transition">
-                      <td className="py-3 px-4 font-bold text-slate-900">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-800">
-                          {row.gst_slab}% Slab
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 font-semibold text-slate-700">
+                    <tr key={row.gst_slab} className="hover:bg-[#FAFAF7] transition">
+                      <td className="py-3 px-4 font-bold text-[#172018]">{row.gst_slab}% Slab</td>
+                      <td className="py-3 px-3 text-right font-medium text-[#647067]">
                         {formatINR(row.taxable_value)}
                       </td>
-                      <td className="py-3 px-3 text-slate-600">
-                        {formatINR(row.cgst_collected)} ({row.gst_slab / 2}%)
+                      <td className="py-3 px-3 text-right font-semibold text-[#172018]">
+                        {formatINR(row.cgst_amount)}
                       </td>
-                      <td className="py-3 px-3 text-slate-600">
-                        {formatINR(row.sgst_collected)} ({row.gst_slab / 2}%)
+                      <td className="py-3 px-3 text-right font-semibold text-[#172018]">
+                        {formatINR(row.sgst_amount)}
                       </td>
-                      <td className="py-3 px-3 font-bold text-slate-900">
-                        {formatINR(row.total_gst)}
-                      </td>
-                      <td className="py-3 px-4 text-right font-extrabold text-slate-900">
-                        {formatINR(row.gross_sales)}
+                      <td className="py-3 px-4 text-right font-black text-[#14532D]">
+                        {formatINR(row.cgst_amount + row.sgst_amount)}
                       </td>
                     </tr>
                   ))
