@@ -1,0 +1,22 @@
+{
+  "name": "kirana-server",
+  "version": "1.0.0",
+  "description": "Kirana Store Backend with native Node 24 SQLite ACID transactions and GST Invoice PDF",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch-path=index.js --watch-path=routes --watch-path=services --watch-path=middleware --watch-path=db/database.js --watch-path=../bot/agent.js --watch-path=../bot/tools.js index.js",
+    "seed": "node db/seed.js",
+    "test": "node test/domain.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pdfkit": "^0.16.0",
+    "pptxgenjs": "^4.0.1",
+    "qrcode": "^1.5.4"
+  }
+}
