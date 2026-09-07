@@ -1,75 +1,95 @@
 import React from 'react';
 
 /**
- * NEBULA Supermarket Brand Logo
- * Concept: Minimal modern grocery basket + fresh leaf + tech orbit
+ * NEBULA Supermarket Official Brand Logo
+ * Hand-drawn warm grocery shopping bag with products
+ * Lockup:
+ * [ GROCERY BAG ICON ]
+ * NEBULA
+ * SUPERMARKET
+ * Simplify. Manage. Grow.
  */
-export default function BrandLogo({ size = 'md', showText = true, theme = 'light', className = '' }) {
+export default function BrandLogo({
+  size = 'md',
+  showText = true,
+  showTagline = true,
+  theme = 'light',
+  className = ''
+}) {
   const sizeMap = {
-    sm: { box: 'w-7 h-7', icon: 16, text: 'text-sm', sub: 'text-[9px]' },
-    md: { box: 'w-9 h-9', icon: 20, text: 'text-base', sub: 'text-[10px]' },
-    lg: { box: 'w-12 h-12', icon: 26, text: 'text-xl', sub: 'text-xs' },
-    xl: { box: 'w-16 h-16', icon: 36, text: 'text-2xl', sub: 'text-sm' }
+    sm: {
+      box: 'w-10 h-10 rounded-xl',
+      img: 'w-full h-full object-contain p-0.5',
+      text: 'text-sm font-black',
+      sub: 'text-[8.5px] tracking-[0.18em]',
+      tag: 'text-[8.5px]'
+    },
+    md: {
+      box: 'w-14 h-14 rounded-2xl',
+      img: 'w-full h-full object-contain p-1',
+      text: 'text-lg font-black',
+      sub: 'text-[10px] tracking-[0.2em]',
+      tag: 'text-[10px]'
+    },
+    lg: {
+      box: 'w-20 h-20 rounded-2xl',
+      img: 'w-full h-full object-contain p-1.5',
+      text: 'text-2xl font-black',
+      sub: 'text-[12px] tracking-[0.22em]',
+      tag: 'text-xs'
+    },
+    xl: {
+      box: 'w-28 h-28 rounded-3xl',
+      img: 'w-full h-full object-contain p-2',
+      text: 'text-4xl font-black',
+      sub: 'text-base tracking-[0.24em]',
+      tag: 'text-sm'
+    }
   };
 
   const s = sizeMap[size] || sizeMap.md;
   const isDark = theme === 'dark';
 
   return (
-    <div className={`flex items-center space-x-3 select-none ${className}`}>
-      {/* Brand Icon Mark */}
+    <div className={`flex items-center space-x-3.5 select-none ${className}`}>
+      {/* Official Grocery Bag Icon from uploaded artwork */}
       <div
-        className={`${s.box} rounded-xl flex-shrink-0 flex items-center justify-center shadow-sm transition-transform duration-200 group-hover:scale-105 bg-[#14532D] text-white`}
+        className={`${s.box} flex-shrink-0 flex items-center justify-center overflow-hidden bg-[#FFF4D6] border border-[#E8E0CC] shadow-2xs transition-transform duration-200 group-hover:scale-105`}
+        title="NEBULA Supermarket"
       >
-        <svg
-          viewBox="0 0 32 32"
-          className="w-3/4 h-3/4"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Shopping Basket / Bag Outline */}
-          <path
-            d="M7 13H25L23.2 24.5C23.1 25.3 22.4 26 21.6 26H10.4C9.6 26 8.9 25.3 8.8 24.5L7 13Z"
-            stroke="#FFFFFF"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="#166534"
-          />
-          {/* Handle */}
-          <path
-            d="M11 13V9C11 6.8 12.8 5 15 5H17C19.2 5 21 6.8 21 9V13"
-            stroke="#F97316"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-          {/* Fresh Leaf Element Inside Basket */}
-          <path
-            d="M16 13C16 13 18.5 15 18.5 18C18.5 19.4 17.4 20.5 16 20.5C14.6 20.5 13.5 19.4 13.5 18C13.5 15 16 13 16 13Z"
-            fill="#22C55E"
-          />
-          {/* Subtle Smart Orbit Tech Dot */}
-          <circle cx="16" cy="18" r="1.5" fill="#FAFAF7" />
-        </svg>
+        <img
+          src="/nebula-bag-logo.png"
+          alt="NEBULA Grocery Bag Icon"
+          className={s.img}
+        />
       </div>
 
-      {/* Brand Typography */}
+      {/* Brand Typography Lockup */}
       {showText && (
         <div className="leading-tight overflow-hidden">
           <div
-            className={`font-black tracking-wider uppercase font-sans ${s.text} ${
-              isDark ? 'text-white' : 'text-[#14532D]'
+            className={`tracking-tight uppercase font-sans ${s.text} ${
+              isDark ? 'text-white' : 'text-[#292929]'
             }`}
           >
             NEBULA
           </div>
           <div
-            className={`font-bold tracking-[0.22em] uppercase ${s.sub} ${
-              isDark ? 'text-emerald-300' : 'text-[#647067]'
+            className={`font-extrabold uppercase font-sans ${s.sub} ${
+              isDark ? 'text-[#FFD84D]' : 'text-[#6B6B63]'
             }`}
           >
             SUPERMARKET
           </div>
+          {showTagline && (
+            <p
+              className={`font-medium tracking-wide mt-0.5 ${s.tag} ${
+                isDark ? 'text-amber-100' : 'text-[#6B6B63]'
+              }`}
+            >
+              Simplify. Manage. Grow.
+            </p>
+          )}
         </div>
       )}
     </div>

@@ -8,35 +8,41 @@ export default {
     extend: {
       colors: {
         nebula: {
-          primary: '#14532D',      // Deep Forest Green
-          primaryHover: '#0F3F22',
-          primaryLight: '#166534',
-          secondary: '#22C55E',    // Fresh Green
-          secondaryLight: '#86EFAC',
-          accent: '#F97316',       // Warm Saffron
-          accentHover: '#EA580C',
-          accentLight: '#FFEDD5',
-          warm: '#FAFAF7',         // Warm Off White
-          surface: '#FFFFFF',      // White Surface
-          mint: '#F0FDF4',         // Soft Mint Surface
-          charcoal: '#172018',     // Dark Charcoal Primary Text
-          muted: '#647067',        // Muted Gray Green Secondary Text
-          border: '#E5E7E2',       // Clean Border
-          success: '#16A34A',
-          warning: '#F59E0B',
+          cream: '#FFF4D6',         // Warm Cream
+          lightCream: '#FFFAED',    // Light Cream
+          yellow: '#FFD84D',        // Brand Yellow
+          softYellow: '#FFF0B3',    // Soft Yellow
+          charcoal: '#292929',      // Dark Charcoal Primary Text
+          green: '#287A4B',         // Fresh Green
+          orange: '#F28C28',        // Saffron Orange Primary CTA
+          white: '#FFFFFF',         // Crisp White
+          border: '#E8E0CC',        // Light Cream Border
+          muted: '#6B6B63',         // Muted Text
+          sidebar: '#FFFDF7',       // Warm White / Cream Sidebar
+          // Legacy mappings mapped to new brand system
+          primary: '#287A4B',
+          primaryHover: '#1E603A',
+          primaryLight: '#3A9662',
+          secondary: '#FFD84D',
+          secondaryLight: '#FFF0B3',
+          accent: '#F28C28',
+          accentHover: '#D9771A',
+          accentLight: '#FFF4D6',
+          warm: '#FFFAED',
+          surface: '#FFFFFF',
+          mint: '#F0FDF4',
           danger: '#DC2626',
           info: '#2563EB',
         },
-        // Backwards compatibility aliases
         kirana: {
-          50: '#F0FDF4',
-          100: '#DCFCE7',
-          200: '#BBF7D0',
-          500: '#22C55E',
-          600: '#16A34A',
-          700: '#15803D',
-          800: '#166534',
-          900: '#14532D',
+          50: '#FFFAED',
+          100: '#FFF4D6',
+          200: '#FFF0B3',
+          500: '#FFD84D',
+          600: '#F28C28',
+          700: '#287A4B',
+          800: '#1E603A',
+          900: '#292929',
         }
       },
       fontFamily: {

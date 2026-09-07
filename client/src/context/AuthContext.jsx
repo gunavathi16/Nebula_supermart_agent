@@ -6,7 +6,17 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('kirana_user');
-    return saved ? JSON.parse(saved) : { id: 1, username: 'admin', name: 'Rajesh Sharma (Owner)', role: 'owner' };
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.name && parsed.name.includes('Rajesh')) {
+          parsed.name = 'Guna (Owner)';
+          localStorage.setItem('kirana_user', JSON.stringify(parsed));
+        }
+        return parsed;
+      } catch (e) {}
+    }
+    return { id: 1, username: 'admin', name: 'Guna (Owner)', role: 'owner' };
   });
   const [token, setToken] = useState(() => localStorage.getItem('kirana_token') || 'demo-token');
 

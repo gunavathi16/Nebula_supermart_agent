@@ -19,6 +19,32 @@ function AppLayout({ children }) {
   const { user } = useAuth();
   const [lowStockCount, setLowStockCount] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem('nebula_sidebar_collapsed') === 'true';
+  });
+
+  const toggleCollapse = () => {
+    setIsCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem('nebula_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Toggle sidebar on Ctrl+B or Cmd+B when not typing inside an input/textarea
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        const tag = document.activeElement?.tagName?.toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea') {
+          e.preventDefault();
+          toggleCollapse();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     // Poll/fetch low stock alerts for sidebar badge
@@ -42,15 +68,26 @@ function AppLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#FAFAF7] text-[#172018]">
+    <div className="flex h-screen overflow-hidden bg-[#FFFAED] text-[#292929]">
       <Sidebar
         lowStockCount={lowStockCount}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={toggleCollapse}
       />
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        {/* Pass toggle function to children via React.cloneElement if needed */}
-        {React.cloneElement(children, { onToggleSidebar: () => setSidebarOpen(prev => !prev) })}
+        {/* Pass toggle function to children via React.cloneElement */}
+        {React.cloneElement(children, {
+          onToggleSidebar: () => {
+            if (window.innerWidth >= 1024) {
+              toggleCollapse();
+            } else {
+              setSidebarOpen(prev => !prev);
+            }
+          },
+          isSidebarCollapsed: isCollapsed
+        })}
       </div>
     </div>
   );

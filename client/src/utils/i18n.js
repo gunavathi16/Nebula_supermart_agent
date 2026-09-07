@@ -13,7 +13,7 @@ export const translations = {
     nav_agent: 'AI Store Agent',
     nav_inventory: 'Inventory',
     nav_invoices: 'Invoices',
-    nav_khata: 'Khata Ledger',
+    nav_khata: 'Customer Dues',
     nav_reports: 'Reports & Tax',
     nav_settings: 'Shop Settings',
     nav_store_ops: 'Store Operations',

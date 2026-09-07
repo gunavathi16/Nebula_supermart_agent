@@ -70,7 +70,7 @@ export default function Settings({ onToggleSidebar }) {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FAFAF7]">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#FFFAED]">
       <Header
         title="Store Settings & Configuration"
         subtitle="Configure shop branding, GSTIN details, invoice headers, and POS counter preferences"
@@ -79,8 +79,8 @@ export default function Settings({ onToggleSidebar }) {
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full space-y-6">
         {saveSuccess && (
-          <div className="p-4 bg-[#F0FDF4] border border-[#BBF7D0] text-[#14532D] rounded-2xl text-xs sm:text-sm font-semibold flex items-center space-x-2 shadow-xs">
-            <CheckCircle className="w-5 h-5 text-[#22C55E]" />
+          <div className="p-4 bg-[#F0FDF4] border border-[#E8E0CC] text-[#287A4B] rounded-2xl text-xs sm:text-sm font-semibold flex items-center space-x-2 shadow-xs">
+            <CheckCircle className="w-5 h-5 text-[#287A4B]" />
             <span>Store preferences and GST tax invoice details saved successfully!</span>
           </div>
         )}
@@ -93,16 +93,16 @@ export default function Settings({ onToggleSidebar }) {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Shop & GST Information */}
-          <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-6 space-y-4">
-            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E5E7E2]">
-              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#14532D] flex items-center justify-center font-bold">
-                <Store className="w-4 h-4 text-[#22C55E]" />
+          <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs p-6 space-y-4">
+            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E8E0CC]">
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#287A4B] flex items-center justify-center font-bold">
+                <Store className="w-4 h-4 text-[#287A4B]" />
               </div>
               <div>
-                <h3 className="font-bold text-[#172018] text-sm sm:text-base">
+                <h3 className="font-bold text-[#292929] text-sm sm:text-base">
                   Shop Identity & Tax Information
                 </h3>
-                <p className="text-xs text-[#647067]">
+                <p className="text-xs text-[#6B6B63]">
                   These details appear directly on official GST Tax Invoices
                 </p>
               </div>
@@ -110,7 +110,7 @@ export default function Settings({ onToggleSidebar }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="block font-bold text-[#172018] mb-1">
+                <label className="block font-bold text-[#292929] mb-1">
                   Store Legal Name (as registered on GST)
                 </label>
                 <input
@@ -119,36 +119,36 @@ export default function Settings({ onToggleSidebar }) {
                   value={settings.shop_name}
                   onChange={handleChange}
                   placeholder="e.g. NEBULA Supermarket"
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-bold focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] font-bold focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#172018] mb-1">GSTIN (15 Digits)</label>
+                <label className="block font-bold text-[#292929] mb-1">GSTIN (15 Digits)</label>
                 <input
                   type="text"
                   name="shop_gstin"
                   value={settings.shop_gstin}
                   onChange={handleChange}
                   placeholder="e.g. 29AAAAA0000A1Z5"
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-mono font-bold uppercase focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] font-mono font-bold uppercase focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#172018] mb-1">Contact Phone</label>
+                <label className="block font-bold text-[#292929] mb-1">Contact Phone</label>
                 <input
                   type="text"
                   name="shop_phone"
                   value={settings.shop_phone}
                   onChange={handleChange}
                   placeholder="e.g. +91 98450 12345"
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#172018] mb-1">
+                <label className="block font-bold text-[#292929] mb-1">
                   POS State & Code
                 </label>
                 <input
@@ -156,12 +156,12 @@ export default function Settings({ onToggleSidebar }) {
                   name="shop_state_code"
                   value={settings.shop_state_code}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block font-bold text-[#172018] mb-1">
+                <label className="block font-bold text-[#292929] mb-1">
                   Store Physical Address
                 </label>
                 <textarea
@@ -170,23 +170,23 @@ export default function Settings({ onToggleSidebar }) {
                   value={settings.shop_address}
                   onChange={handleChange}
                   placeholder="Shop number, street, area, city, pincode..."
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 2: Counter & POS Defaults */}
-          <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-6 space-y-4">
-            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E5E7E2]">
-              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#14532D] flex items-center justify-center font-bold">
-                <Sliders className="w-4 h-4 text-[#22C55E]" />
+          <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs p-6 space-y-4">
+            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E8E0CC]">
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#287A4B] flex items-center justify-center font-bold">
+                <Sliders className="w-4 h-4 text-[#287A4B]" />
               </div>
               <div>
-                <h3 className="font-bold text-[#172018] text-sm sm:text-base">
+                <h3 className="font-bold text-[#292929] text-sm sm:text-base">
                   Billing Counter Preferences
                 </h3>
-                <p className="text-xs text-[#647067]">
+                <p className="text-xs text-[#6B6B63]">
                   Speed up cashier workflows by configuring default behaviors
                 </p>
               </div>
@@ -194,14 +194,14 @@ export default function Settings({ onToggleSidebar }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="block font-bold text-[#172018] mb-1">
+                <label className="block font-bold text-[#292929] mb-1">
                   Default POS Payment Mode
                 </label>
                 <select
                   name="default_payment_mode"
                   value={settings.default_payment_mode}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-bold"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] font-bold"
                 >
                   <option value="cash">Cash</option>
                   <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
@@ -211,19 +211,19 @@ export default function Settings({ onToggleSidebar }) {
               </div>
 
               <div>
-                <label className="block font-bold text-[#172018] mb-1">Invoice Number Prefix</label>
+                <label className="block font-bold text-[#292929] mb-1">Invoice Number Prefix</label>
                 <input
                   type="text"
                   name="invoice_prefix"
                   value={settings.invoice_prefix}
                   onChange={handleChange}
                   placeholder="e.g. NEB-2026-"
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] font-mono font-bold"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] font-mono font-bold"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#172018] mb-1">
+                <label className="block font-bold text-[#292929] mb-1">
                   Default Brand for Atta
                 </label>
                 <input
@@ -231,12 +231,12 @@ export default function Settings({ onToggleSidebar }) {
                   name="default_brand_atta"
                   value={settings.default_brand_atta}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018]"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929]"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#172018] mb-1">
+                <label className="block font-bold text-[#292929] mb-1">
                   Default Brand for Cooking Oil
                 </label>
                 <input
@@ -244,23 +244,23 @@ export default function Settings({ onToggleSidebar }) {
                   name="default_brand_oil"
                   value={settings.default_brand_oil}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018]"
+                  className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929]"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 3: Tax Invoice Footer Note */}
-          <div className="bg-white rounded-2xl border border-[#E5E7E2] shadow-xs p-6 space-y-4">
-            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E5E7E2]">
-              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#14532D] flex items-center justify-center font-bold">
-                <FileText className="w-4 h-4 text-[#22C55E]" />
+          <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs p-6 space-y-4">
+            <div className="flex items-center space-x-2.5 pb-3 border-b border-[#E8E0CC]">
+              <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#287A4B] flex items-center justify-center font-bold">
+                <FileText className="w-4 h-4 text-[#287A4B]" />
               </div>
               <div>
-                <h3 className="font-bold text-[#172018] text-sm sm:text-base">
+                <h3 className="font-bold text-[#292929] text-sm sm:text-base">
                   Tax Invoice Footer Note
                 </h3>
-                <p className="text-xs text-[#647067]">
+                <p className="text-xs text-[#6B6B63]">
                   Terms and return policies printed on the bottom of customer receipts
                 </p>
               </div>
@@ -273,7 +273,7 @@ export default function Settings({ onToggleSidebar }) {
                 value={settings.invoice_footer_note}
                 onChange={handleChange}
                 placeholder="Thank you for shopping with NEBULA Supermarket! Goods once sold can be exchanged within 48 hours."
-                className="w-full px-3 py-2 bg-[#FAFAF7] border border-[#E5E7E2] rounded-xl text-[#172018] focus:ring-2 focus:ring-[#14532D]/20 focus:border-[#14532D] outline-hidden"
+                className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden"
               />
             </div>
           </div>
@@ -283,9 +283,9 @@ export default function Settings({ onToggleSidebar }) {
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-3 bg-[#14532D] hover:bg-[#166534] text-white font-bold rounded-xl shadow-xs transition active:scale-95 flex items-center space-x-2 text-xs sm:text-sm cursor-pointer"
+              className="px-6 py-3 bg-[#287A4B] hover:bg-[#287A4B] text-white font-bold rounded-xl shadow-xs transition active:scale-95 flex items-center space-x-2 text-xs sm:text-sm cursor-pointer"
             >
-              <Save className="w-4 h-4 text-[#22C55E]" />
+              <Save className="w-4 h-4 text-[#287A4B]" />
               <span>{saving ? 'Saving...' : 'Save Store Settings'}</span>
             </button>
           </div>
