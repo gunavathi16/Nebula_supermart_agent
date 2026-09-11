@@ -272,7 +272,7 @@ export default function Inventory({ onToggleSidebar }) {
   ];
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FFFAED]">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F8FAFC]">
       <Header
         title="Inventory Catalog"
         subtitle="Manage SKU prices, FEFO batches, stock receipts & replenishment"
@@ -281,15 +281,15 @@ export default function Inventory({ onToggleSidebar }) {
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-5 max-w-7xl mx-auto w-full">
         {/* Top Control & Search Bar */}
-        <div className="bg-white p-4 rounded-2xl border border-[#E8E0CC] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-[#6B6B63] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by SKU, product name, or HSN code..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs sm:text-sm text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden font-medium"
+              className="w-full pl-10 pr-4 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs sm:text-sm text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D] outline-hidden font-medium"
             />
           </form>
 
@@ -300,7 +300,7 @@ export default function Inventory({ onToggleSidebar }) {
               className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition cursor-pointer ${
                 onlyLowStock
                   ? 'bg-red-50 text-red-700 border border-red-200 shadow-xs'
-                  : 'bg-[#FFFAED] text-[#6B6B63] hover:bg-slate-100 border border-[#E8E0CC]'
+                  : 'bg-[#F8FAFC] text-[#64748B] hover:bg-slate-100 border border-[#E2E8F0]'
               }`}
             >
               <AlertTriangle className="w-3.5 h-3.5" />
@@ -310,16 +310,16 @@ export default function Inventory({ onToggleSidebar }) {
             {/* Refresh */}
             <button
               onClick={() => fetchProducts(true)}
-              className="p-2 bg-[#FFFAED] hover:bg-slate-100 text-[#6B6B63] rounded-xl border border-[#E8E0CC] transition cursor-pointer"
+              className="p-2 bg-[#F8FAFC] hover:bg-slate-100 text-[#64748B] rounded-xl border border-[#E2E8F0] transition cursor-pointer"
               title="Refresh inventory"
             >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#287A4B]' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#15803D]' : ''}`} />
             </button>
 
             {/* Add Product CTA */}
             <button
               onClick={handleOpenAdd}
-              className="bg-[#287A4B] hover:bg-[#287A4B] text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow-xs transition active:scale-95 cursor-pointer"
+              className="bg-[#15803D] hover:bg-[#15803D] text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center space-x-1.5 shadow-xs transition active:scale-95 cursor-pointer"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Add Product</span>
@@ -328,13 +328,13 @@ export default function Inventory({ onToggleSidebar }) {
         </div>
 
         {/* Navigation View Switcher */}
-        <div className="flex flex-wrap items-center gap-2 border-b border-[#E8E0CC] pb-3 text-xs sm:text-sm">
+        <div className="flex flex-wrap items-center gap-2 border-b border-[#E2E8F0] pb-3 text-xs sm:text-sm">
           <button
             onClick={() => setActiveView('catalog')}
             className={`px-4 py-2 rounded-xl font-bold flex items-center space-x-2 transition cursor-pointer ${
               activeView === 'catalog'
-                ? 'bg-[#287A4B] text-white shadow-xs'
-                : 'bg-white text-[#6B6B63] hover:bg-[#F0FDF4] hover:text-[#287A4B] border border-[#E8E0CC]'
+                ? 'bg-[#15803D] text-white shadow-xs'
+                : 'bg-white text-[#64748B] hover:bg-[#F0FDF4] hover:text-[#15803D] border border-[#E2E8F0]'
             }`}
           >
             <Package className="w-4 h-4" />
@@ -346,8 +346,8 @@ export default function Inventory({ onToggleSidebar }) {
             onClick={() => setActiveView('reorder')}
             className={`px-4 py-2 rounded-xl font-bold flex items-center space-x-2 transition cursor-pointer ${
               activeView === 'reorder'
-                ? 'bg-[#287A4B] text-white shadow-xs'
-                : 'bg-white text-[#6B6B63] hover:bg-[#F0FDF4] hover:text-[#287A4B] border border-[#E8E0CC]'
+                ? 'bg-[#15803D] text-white shadow-xs'
+                : 'bg-white text-[#64748B] hover:bg-[#F0FDF4] hover:text-[#15803D] border border-[#E2E8F0]'
             }`}
           >
             <RefreshCw className="w-4 h-4" />
@@ -363,14 +363,14 @@ export default function Inventory({ onToggleSidebar }) {
             onClick={() => setActiveView('expiry')}
             className={`px-4 py-2 rounded-xl font-bold flex items-center space-x-2 transition cursor-pointer ${
               activeView === 'expiry'
-                ? 'bg-[#287A4B] text-white shadow-xs'
-                : 'bg-white text-[#6B6B63] hover:bg-[#F0FDF4] hover:text-[#287A4B] border border-[#E8E0CC]'
+                ? 'bg-[#15803D] text-white shadow-xs'
+                : 'bg-white text-[#64748B] hover:bg-[#F0FDF4] hover:text-[#15803D] border border-[#E2E8F0]'
             }`}
           >
             <History className="w-4 h-4" />
             <span>Expiry & FEFO Batches</span>
             {expiryData?.expiring_soon_count > 0 && (
-              <span className="bg-[#F28C28] text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">
+              <span className="bg-[#EA580C] text-white text-[10px] px-1.5 py-0.5 rounded-full font-black">
                 {expiryData.expiring_soon_count} Due Soon
               </span>
             )}
@@ -409,29 +409,29 @@ export default function Inventory({ onToggleSidebar }) {
                 <div className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
                   Target Stock Buffer
                 </div>
-                <div className="text-2xl font-black text-[#287A4B] mt-1">14 Days</div>
+                <div className="text-2xl font-black text-[#15803D] mt-1">14 Days</div>
                 <p className="text-[11px] text-emerald-600 mt-1">
                   Intelligent dynamic replenishment target
                 </p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs overflow-hidden">
-              <div className="p-4 border-b border-[#E8E0CC]">
-                <h3 className="font-bold text-[#292929] text-sm">Automated Restock Forecast</h3>
-                <p className="text-xs text-[#6B6B63]">
+            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-xs overflow-hidden">
+              <div className="p-4 border-b border-[#E2E8F0]">
+                <h3 className="font-bold text-[#0F172A] text-sm">Automated Restock Forecast</h3>
+                <p className="text-xs text-[#64748B]">
                   Stock replenishment suggestions derived from past sales velocity
                 </p>
               </div>
 
               {!reorderData?.suggestions || reorderData.suggestions.length === 0 ? (
-                <div className="py-12 text-center text-[#6B6B63] text-xs">
+                <div className="py-12 text-center text-[#64748B] text-xs">
                   All items are well stocked for the next 14 operating days.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#FFFAED] border-b border-[#E8E0CC] text-[#6B6B63] font-bold uppercase text-[10px]">
+                    <thead className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] font-bold uppercase text-[10px]">
                       <tr>
                         <th className="py-3 px-4">Product Name</th>
                         <th className="py-3 px-3">Current Stock</th>
@@ -441,14 +441,14 @@ export default function Inventory({ onToggleSidebar }) {
                         <th className="py-3 px-4 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E8E0CC]">
+                    <tbody className="divide-y divide-[#E2E8F0]">
                       {reorderData.suggestions.map((s) => (
-                        <tr key={s.id} className="hover:bg-[#FFFAED] transition">
-                          <td className="py-3 px-4 font-bold text-[#292929]">{s.name}</td>
-                          <td className="py-3 px-3 font-semibold text-[#6B6B63]">
+                        <tr key={s.id} className="hover:bg-[#F8FAFC] transition">
+                          <td className="py-3 px-4 font-bold text-[#0F172A]">{s.name}</td>
+                          <td className="py-3 px-3 font-semibold text-[#64748B]">
                             {formatQtyUnit(s.stock_qty, s.unit)}
                           </td>
-                          <td className="py-3 px-3 font-semibold text-[#292929]">
+                          <td className="py-3 px-3 font-semibold text-[#0F172A]">
                             {s.daily_sales_rate} {s.unit}/day
                           </td>
                           <td className="py-3 px-3">
@@ -462,7 +462,7 @@ export default function Inventory({ onToggleSidebar }) {
                               {s.days_of_stock_left <= 0 ? 'Stockout Today' : `${s.days_of_stock_left} days`}
                             </span>
                           </td>
-                          <td className="py-3 px-3 font-black text-[#287A4B]">
+                          <td className="py-3 px-3 font-black text-[#15803D]">
                             +{s.suggested_reorder_qty} {s.unit}
                           </td>
                           <td className="py-3 px-4 text-right">
@@ -471,7 +471,7 @@ export default function Inventory({ onToggleSidebar }) {
                                 const prod = products.find((p) => p.id === s.id);
                                 if (prod) handleOpenReceive(prod, s.suggested_reorder_qty);
                               }}
-                              className="px-3 py-1.5 rounded-lg bg-[#F28C28] hover:bg-[#E07D1E] text-white font-bold text-xs shadow-xs"
+                              className="px-3 py-1.5 rounded-lg bg-[#EA580C] hover:bg-[#E07D1E] text-white font-bold text-xs shadow-xs"
                             >
                               + Restock
                             </button>
@@ -490,14 +490,14 @@ export default function Inventory({ onToggleSidebar }) {
         {activeView === 'expiry' && (
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-2xl border border-[#E8E0CC] shadow-xs bg-[#F0FDF4]/40">
-                <div className="text-xs font-bold text-[#287A4B] uppercase tracking-wider">
+              <div className="bg-white p-4 rounded-2xl border border-[#E2E8F0] shadow-xs bg-[#F0FDF4]/40">
+                <div className="text-xs font-bold text-[#15803D] uppercase tracking-wider">
                   Active Tracked Batches
                 </div>
-                <div className="text-2xl font-black text-[#287A4B] mt-1">
+                <div className="text-2xl font-black text-[#15803D] mt-1">
                   {expiryData?.all_active_batches || 0}
                 </div>
-                <p className="text-[11px] text-[#287A4B] mt-1">
+                <p className="text-[11px] text-[#15803D] mt-1">
                   Batches tracked across catalog with expiry dates
                 </p>
               </div>
@@ -515,22 +515,22 @@ export default function Inventory({ onToggleSidebar }) {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs overflow-hidden">
-              <div className="p-4 border-b border-[#E8E0CC]">
-                <h3 className="font-bold text-[#292929] text-sm">Product Batches & Expiry Timeline</h3>
-                <p className="text-xs text-[#6B6B63]">
+            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-xs overflow-hidden">
+              <div className="p-4 border-b border-[#E2E8F0]">
+                <h3 className="font-bold text-[#0F172A] text-sm">Product Batches & Expiry Timeline</h3>
+                <p className="text-xs text-[#64748B]">
                   Sorted by earliest expiry date (First-Expired, First-Out sequence)
                 </p>
               </div>
 
               {!expiryData?.expiring_soon || expiryData.expiring_soon.length === 0 ? (
-                <div className="py-12 text-center text-[#6B6B63] text-xs">
+                <div className="py-12 text-center text-[#64748B] text-xs">
                   No batches due to expire in the next 30 days.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-[#FFFAED] border-b border-[#E8E0CC] text-[#6B6B63] font-bold uppercase text-[10px]">
+                    <thead className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] font-bold uppercase text-[10px]">
                       <tr>
                         <th className="py-3 px-4">Product</th>
                         <th className="py-3 px-3">Batch Number</th>
@@ -539,19 +539,19 @@ export default function Inventory({ onToggleSidebar }) {
                         <th className="py-3 px-3">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E8E0CC]">
+                    <tbody className="divide-y divide-[#E2E8F0]">
                       {expiryData.expiring_soon.map((b, idx) => {
                         const isCritical = b.days_until_expiry <= 7;
                         return (
-                          <tr key={idx} className="hover:bg-[#FFFAED] transition">
-                            <td className="py-3 px-4 font-bold text-[#292929]">{b.product_name}</td>
-                            <td className="py-3 px-3 font-mono text-[#6B6B63] font-medium">
+                          <tr key={idx} className="hover:bg-[#F8FAFC] transition">
+                            <td className="py-3 px-4 font-bold text-[#0F172A]">{b.product_name}</td>
+                            <td className="py-3 px-3 font-mono text-[#64748B] font-medium">
                               {b.batch_number}
                             </td>
-                            <td className="py-3 px-3 font-semibold text-[#292929]">
+                            <td className="py-3 px-3 font-semibold text-[#0F172A]">
                               {b.stock_qty} {b.unit}
                             </td>
-                            <td className="py-3 px-3 font-mono font-bold text-[#292929]">
+                            <td className="py-3 px-3 font-mono font-bold text-[#0F172A]">
                               {b.expiry_date}
                             </td>
                             <td className="py-3 px-3">
@@ -580,17 +580,17 @@ export default function Inventory({ onToggleSidebar }) {
 
         {/* VIEW 3: MAIN CATALOG DIRECTORY */}
         {activeView === 'catalog' && (
-          <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-xs overflow-hidden">
             {/* Category Filter Tabs */}
-            <div className="p-3 border-b border-[#E8E0CC] flex items-center gap-1.5 overflow-x-auto text-xs">
+            <div className="p-3 border-b border-[#E2E8F0] flex items-center gap-1.5 overflow-x-auto text-xs">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition cursor-pointer ${
                     category === cat.id
-                      ? 'bg-[#287A4B] text-white font-bold shadow-xs'
-                      : 'bg-[#FFFAED] text-[#6B6B63] hover:bg-slate-100 border border-[#E8E0CC]'
+                      ? 'bg-[#15803D] text-white font-bold shadow-xs'
+                      : 'bg-[#F8FAFC] text-[#64748B] hover:bg-slate-100 border border-[#E2E8F0]'
                   }`}
                 >
                   {cat.label}
@@ -600,17 +600,17 @@ export default function Inventory({ onToggleSidebar }) {
 
             {loading ? (
               <div className="py-16 flex flex-col items-center justify-center gap-3">
-                <RefreshCw className="w-6 h-6 text-[#287A4B] animate-spin" />
-                <span className="text-xs text-[#6B6B63] font-semibold">Loading catalog...</span>
+                <RefreshCw className="w-6 h-6 text-[#15803D] animate-spin" />
+                <span className="text-xs text-[#64748B] font-semibold">Loading catalog...</span>
               </div>
             ) : products.length === 0 ? (
-              <div className="py-16 text-center text-[#6B6B63] text-xs">
+              <div className="py-16 text-center text-[#64748B] text-xs">
                 No products found in catalog. Click "Add Product" to add your first SKU.
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FFFAED] border-b border-[#E8E0CC] text-[#6B6B63] font-bold uppercase text-[10px]">
+                  <thead className="bg-[#F8FAFC] border-b border-[#E2E8F0] text-[#64748B] font-bold uppercase text-[10px]">
                     <tr>
                       <th className="py-3 px-4">SKU / Code</th>
                       <th className="py-3 px-4">Product Name</th>
@@ -623,18 +623,18 @@ export default function Inventory({ onToggleSidebar }) {
                       <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E8E0CC]">
+                  <tbody className="divide-y divide-[#E2E8F0]">
                     {products.map((p) => {
                       const isOut = Number(p.stock_qty) <= 0;
                       const isLow = Number(p.stock_qty) <= Number(p.reorder_level);
 
                       return (
-                        <tr key={p.id} className="hover:bg-[#FFFAED] transition">
-                          <td className="py-3 px-4 font-mono font-bold text-[#6B6B63] text-[11px]">
+                        <tr key={p.id} className="hover:bg-[#F8FAFC] transition">
+                          <td className="py-3 px-4 font-mono font-bold text-[#64748B] text-[11px]">
                             {p.sku}
                           </td>
                           <td className="py-3 px-4">
-                            <div className="font-bold text-[#292929] text-xs flex items-center gap-1.5">
+                            <div className="font-bold text-[#0F172A] text-xs flex items-center gap-1.5">
                               <span>{p.name}</span>
                               {p.is_loose ? (
                                 <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
@@ -642,21 +642,21 @@ export default function Inventory({ onToggleSidebar }) {
                                 </span>
                               ) : null}
                             </div>
-                            <span className="text-[10px] text-[#6B6B63] font-medium">per {p.unit}</span>
+                            <span className="text-[10px] text-[#64748B] font-medium">per {p.unit}</span>
                           </td>
-                          <td className="py-3 px-3 font-semibold text-[#6B6B63] capitalize">
+                          <td className="py-3 px-3 font-semibold text-[#64748B] capitalize">
                             {p.category}
                           </td>
-                          <td className="py-3 px-3 text-right font-medium text-[#6B6B63]">
+                          <td className="py-3 px-3 text-right font-medium text-[#64748B]">
                             {formatINR(p.cost_price)}
                           </td>
-                          <td className="py-3 px-3 text-right font-black text-[#287A4B]">
+                          <td className="py-3 px-3 text-right font-black text-[#15803D]">
                             {formatINR(p.sell_price)}
                           </td>
-                          <td className="py-3 px-3 font-mono text-[11px] text-[#6B6B63]">
+                          <td className="py-3 px-3 font-mono text-[11px] text-[#64748B]">
                             {p.gst_slab}% (HSN {p.hsn_code})
                           </td>
-                          <td className="py-3 px-3 font-bold text-[#292929]">
+                          <td className="py-3 px-3 font-bold text-[#0F172A]">
                             {formatQtyUnit(p.stock_qty, p.unit, p.is_loose)}
                           </td>
                           <td className="py-3 px-3">
@@ -666,7 +666,7 @@ export default function Inventory({ onToggleSidebar }) {
                                   ? 'bg-red-50 text-[#DC2626] border border-red-200'
                                   : isLow
                                   ? 'bg-amber-50 text-[#B45309] border border-amber-200'
-                                  : 'bg-[#F0FDF4] text-[#287A4B] border border-[#E8E0CC]'
+                                  : 'bg-[#F0FDF4] text-[#15803D] border border-[#E2E8F0]'
                               }`}
                             >
                               {isOut ? 'OUT OF STOCK' : isLow ? 'LOW STOCK' : 'IN STOCK'}
@@ -678,7 +678,7 @@ export default function Inventory({ onToggleSidebar }) {
                               <button
                                 onClick={() => handleOpenReceive(p)}
                                 title="Receive New Stock"
-                                className="px-2.5 py-1.5 rounded-lg bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#287A4B] border border-[#E8E0CC] font-bold text-xs transition cursor-pointer"
+                                className="px-2.5 py-1.5 rounded-lg bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#15803D] border border-[#E2E8F0] font-bold text-xs transition cursor-pointer"
                               >
                                 + Stock
                               </button>
@@ -686,7 +686,7 @@ export default function Inventory({ onToggleSidebar }) {
                               <button
                                 onClick={() => handleOpenHistory(p)}
                                 title="Movement History"
-                                className="p-1.5 rounded-lg bg-[#FFFAED] hover:bg-slate-100 text-[#6B6B63] border border-[#E8E0CC] transition cursor-pointer"
+                                className="p-1.5 rounded-lg bg-[#F8FAFC] hover:bg-slate-100 text-[#64748B] border border-[#E2E8F0] transition cursor-pointer"
                               >
                                 <History className="w-3.5 h-3.5" />
                               </button>
@@ -694,7 +694,7 @@ export default function Inventory({ onToggleSidebar }) {
                               <button
                                 onClick={() => handleOpenEdit(p)}
                                 title="Edit Product"
-                                className="p-1.5 rounded-lg bg-[#FFFAED] hover:bg-slate-100 text-[#6B6B63] border border-[#E8E0CC] transition cursor-pointer"
+                                className="p-1.5 rounded-lg bg-[#F8FAFC] hover:bg-slate-100 text-[#64748B] border border-[#E2E8F0] transition cursor-pointer"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
                               </button>
@@ -713,17 +713,17 @@ export default function Inventory({ onToggleSidebar }) {
         {/* MODAL: Receive Stock */}
         {showReceiveModal && selectedProduct && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-card max-w-lg w-full p-6 space-y-4 border border-[#E8E0CC]">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E0CC]">
+            <div className="bg-white rounded-3xl shadow-card max-w-lg w-full p-6 space-y-4 border border-[#E2E8F0]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
                 <div className="flex items-center space-x-2">
-                  <ArrowDownCircle className="w-5 h-5 text-[#287A4B]" />
-                  <h3 className="font-bold text-[#292929] text-base">
+                  <ArrowDownCircle className="w-5 h-5 text-[#15803D]" />
+                  <h3 className="font-bold text-[#0F172A] text-base">
                     Receive Stock: {selectedProduct.name}
                   </h3>
                 </div>
                 <button
                   onClick={() => setShowReceiveModal(false)}
-                  className="p-1 text-[#6B6B63] hover:text-[#292929] rounded-lg hover:bg-slate-100"
+                  className="p-1 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -738,7 +738,7 @@ export default function Inventory({ onToggleSidebar }) {
               <form onSubmit={handleReceiveStockSubmit} className="space-y-3 text-xs">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">
+                    <label className="block font-bold text-[#0F172A] mb-1">
                       Quantity to Receive ({selectedProduct.unit})
                     </label>
                     <input
@@ -748,12 +748,12 @@ export default function Inventory({ onToggleSidebar }) {
                       value={receiveForm.qty}
                       onChange={(e) => setReceiveForm({ ...receiveForm, qty: e.target.value })}
                       placeholder="e.g. 50"
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-bold text-sm text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-bold text-sm text-[#0F172A]"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">
+                    <label className="block font-bold text-[#0F172A] mb-1">
                       Batch Number (FEFO)
                     </label>
                     <input
@@ -762,14 +762,14 @@ export default function Inventory({ onToggleSidebar }) {
                       onChange={(e) =>
                         setReceiveForm({ ...receiveForm, batch_number: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-mono text-xs text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-mono text-xs text-[#0F172A]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Wholesale Cost Price (₹)</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Wholesale Cost Price (₹)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -778,12 +778,12 @@ export default function Inventory({ onToggleSidebar }) {
                       onChange={(e) =>
                         setReceiveForm({ ...receiveForm, cost_price: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-semibold text-xs text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-semibold text-xs text-[#0F172A]"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Retail MRP / Sell Price (₹)</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Retail MRP / Sell Price (₹)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -792,37 +792,37 @@ export default function Inventory({ onToggleSidebar }) {
                       onChange={(e) =>
                         setReceiveForm({ ...receiveForm, sell_price: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-bold text-xs text-[#287A4B]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-bold text-xs text-[#15803D]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Mfg Date</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Mfg Date</label>
                     <input
                       type="date"
                       value={receiveForm.mfg_date}
                       onChange={(e) => setReceiveForm({ ...receiveForm, mfg_date: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Expiry Date (FEFO)</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Expiry Date (FEFO)</label>
                     <input
                       type="date"
                       value={receiveForm.expiry_date}
                       onChange={(e) =>
                         setReceiveForm({ ...receiveForm, expiry_date: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-[#292929] mb-1">
+                  <label className="block font-bold text-[#0F172A] mb-1">
                     Invoice Notes / Supplier Reference
                   </label>
                   <input
@@ -830,22 +830,22 @@ export default function Inventory({ onToggleSidebar }) {
                     value={receiveForm.notes}
                     onChange={(e) => setReceiveForm({ ...receiveForm, notes: e.target.value })}
                     placeholder="e.g. Received from Metro Cash & Carry, Invoice #5821"
-                    className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                    className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                   />
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E8E0CC]">
+                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E2E8F0]">
                   <button
                     type="button"
                     onClick={() => setShowReceiveModal(false)}
-                    className="px-4 py-2 bg-[#FFFAED] text-[#292929] font-bold rounded-xl border border-[#E8E0CC]"
+                    className="px-4 py-2 bg-[#F8FAFC] text-[#0F172A] font-bold rounded-xl border border-[#E2E8F0]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 bg-[#F28C28] hover:bg-[#E07D1E] text-white font-black rounded-xl shadow-xs transition active:scale-95 cursor-pointer"
+                    className="px-5 py-2 bg-[#EA580C] hover:bg-[#E07D1E] text-white font-black rounded-xl shadow-xs transition active:scale-95 cursor-pointer"
                   >
                     {submitting ? 'Receiving...' : '+ Confirm Stock Intake'}
                   </button>
@@ -858,14 +858,14 @@ export default function Inventory({ onToggleSidebar }) {
         {/* MODAL: Add / Edit Product */}
         {showAddModal && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-card max-w-xl w-full p-6 space-y-4 border border-[#E8E0CC]">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E0CC]">
-                <h3 className="font-black text-[#292929] text-base">
+            <div className="bg-white rounded-3xl shadow-card max-w-xl w-full p-6 space-y-4 border border-[#E2E8F0]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+                <h3 className="font-black text-[#0F172A] text-base">
                   {editProduct ? `Edit Product: ${editProduct.name}` : 'Add New Product to Catalog'}
                 </h3>
                 <button
                   onClick={() => setShowAddModal(false)}
-                  className="p-1 text-[#6B6B63] hover:text-[#292929] rounded-lg hover:bg-slate-100"
+                  className="p-1 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -880,37 +880,37 @@ export default function Inventory({ onToggleSidebar }) {
               <form onSubmit={handleProductSubmit} className="space-y-3 text-xs">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Product Name *</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Product Name *</label>
                     <input
                       type="text"
                       required
                       value={productForm.name}
                       onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
                       placeholder="e.g. Aashirvaad Atta 5kg"
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs font-medium text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs font-medium text-[#0F172A]"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">SKU / Barcode *</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">SKU / Barcode *</label>
                     <input
                       type="text"
                       required
                       value={productForm.sku}
                       onChange={(e) => setProductForm({ ...productForm, sku: e.target.value })}
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs font-mono text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs font-mono text-[#0F172A]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Category</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Category</label>
                     <select
                       value={productForm.category}
                       onChange={(e) =>
                         setProductForm({ ...productForm, category: e.target.value })
                       }
-                      className="w-full px-2.5 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                      className="w-full px-2.5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                     >
                       <option value="staples">Staples & Grains</option>
                       <option value="packaged">Packaged Foods</option>
@@ -920,11 +920,11 @@ export default function Inventory({ onToggleSidebar }) {
                     </select>
                   </div>
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Unit</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Unit</label>
                     <select
                       value={productForm.unit}
                       onChange={(e) => setProductForm({ ...productForm, unit: e.target.value })}
-                      className="w-full px-2.5 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                      className="w-full px-2.5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                     >
                       <option value="packet">packet</option>
                       <option value="kg">kg (weight)</option>
@@ -934,7 +934,7 @@ export default function Inventory({ onToggleSidebar }) {
                     </select>
                   </div>
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Measure Type</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Measure Type</label>
                     <div className="flex items-center space-x-2 pt-2">
                       <input
                         type="checkbox"
@@ -943,9 +943,9 @@ export default function Inventory({ onToggleSidebar }) {
                         onChange={(e) =>
                           setProductForm({ ...productForm, is_loose: e.target.checked })
                         }
-                        className="rounded border-[#E8E0CC] text-[#287A4B]"
+                        className="rounded border-[#E2E8F0] text-[#15803D]"
                       />
-                      <label htmlFor="isLooseCheckbox" className="font-semibold text-[#292929]">
+                      <label htmlFor="isLooseCheckbox" className="font-semibold text-[#0F172A]">
                         Loose (Weighed)
                       </label>
                     </div>
@@ -954,7 +954,7 @@ export default function Inventory({ onToggleSidebar }) {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Wholesale Cost (₹) *</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Wholesale Cost (₹) *</label>
                     <input
                       type="number"
                       step="0.01"
@@ -963,11 +963,11 @@ export default function Inventory({ onToggleSidebar }) {
                       onChange={(e) =>
                         setProductForm({ ...productForm, cost_price: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs font-semibold text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs font-semibold text-[#0F172A]"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Selling Price / MRP (₹) *</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Selling Price / MRP (₹) *</label>
                     <input
                       type="number"
                       step="0.01"
@@ -976,20 +976,20 @@ export default function Inventory({ onToggleSidebar }) {
                       onChange={(e) =>
                         setProductForm({ ...productForm, sell_price: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs font-bold text-[#287A4B]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs font-bold text-[#15803D]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">GST Slab (%)</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">GST Slab (%)</label>
                     <select
                       value={productForm.gst_slab}
                       onChange={(e) =>
                         setProductForm({ ...productForm, gst_slab: e.target.value })
                       }
-                      className="w-full px-2.5 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                      className="w-full px-2.5 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                     >
                       <option value="0">0% (Nil)</option>
                       <option value="5">5% (Staples / Oils)</option>
@@ -999,41 +999,41 @@ export default function Inventory({ onToggleSidebar }) {
                     </select>
                   </div>
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">HSN Code</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">HSN Code</label>
                     <input
                       type="text"
                       value={productForm.hsn_code}
                       onChange={(e) =>
                         setProductForm({ ...productForm, hsn_code: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs font-mono text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs font-mono text-[#0F172A]"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-[#292929] mb-1">Reorder Level</label>
+                    <label className="block font-bold text-[#0F172A] mb-1">Reorder Level</label>
                     <input
                       type="number"
                       value={productForm.reorder_level}
                       onChange={(e) =>
                         setProductForm({ ...productForm, reorder_level: e.target.value })
                       }
-                      className="w-full px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs text-[#292929]"
+                      className="w-full px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs text-[#0F172A]"
                     />
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E8E0CC]">
+                <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E2E8F0]">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2 bg-[#FFFAED] text-[#292929] font-bold rounded-xl border border-[#E8E0CC]"
+                    className="px-4 py-2 bg-[#F8FAFC] text-[#0F172A] font-bold rounded-xl border border-[#E2E8F0]"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2 bg-[#287A4B] hover:bg-[#287A4B] text-white font-bold rounded-xl shadow-xs transition active:scale-95 cursor-pointer"
+                    className="px-5 py-2 bg-[#15803D] hover:bg-[#15803D] text-white font-bold rounded-xl shadow-xs transition active:scale-95 cursor-pointer"
                   >
                     {submitting ? 'Saving...' : editProduct ? 'Update Product' : '+ Add to Catalog'}
                   </button>
@@ -1046,14 +1046,14 @@ export default function Inventory({ onToggleSidebar }) {
         {/* MODAL: Stock Movements History */}
         {showHistoryModal && selectedProduct && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-card max-w-2xl w-full p-6 space-y-4 border border-[#E8E0CC]">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E0CC]">
-                <h3 className="font-black text-[#292929] text-base">
+            <div className="bg-white rounded-3xl shadow-card max-w-2xl w-full p-6 space-y-4 border border-[#E2E8F0]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
+                <h3 className="font-black text-[#0F172A] text-base">
                   Audit History: {selectedProduct.name}
                 </h3>
                 <button
                   onClick={() => setShowHistoryModal(false)}
-                  className="p-1 text-[#6B6B63] hover:text-[#292929] rounded-lg hover:bg-slate-100"
+                  className="p-1 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1061,14 +1061,14 @@ export default function Inventory({ onToggleSidebar }) {
 
               {loadingHistory ? (
                 <div className="py-12 flex justify-center">
-                  <RefreshCw className="w-6 h-6 text-[#287A4B] animate-spin" />
+                  <RefreshCw className="w-6 h-6 text-[#15803D] animate-spin" />
                 </div>
               ) : historyMovements.length === 0 ? (
-                <div className="py-12 text-center text-[#6B6B63] text-xs">
+                <div className="py-12 text-center text-[#64748B] text-xs">
                   No stock movements recorded yet for this item.
                 </div>
               ) : (
-                <div className="max-h-72 overflow-y-auto divide-y divide-[#E8E0CC]">
+                <div className="max-h-72 overflow-y-auto divide-y divide-[#E2E8F0]">
                   {historyMovements.map((m) => (
                     <div key={m.id} className="py-2.5 flex items-center justify-between text-xs">
                       <div>
@@ -1076,7 +1076,7 @@ export default function Inventory({ onToggleSidebar }) {
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                               m.type === 'in'
-                                ? 'bg-[#F0FDF4] text-[#287A4B]'
+                                ? 'bg-[#F0FDF4] text-[#15803D]'
                                 : m.type === 'out'
                                 ? 'bg-red-50 text-red-700'
                                 : 'bg-slate-100 text-slate-700'
@@ -1084,13 +1084,13 @@ export default function Inventory({ onToggleSidebar }) {
                           >
                             {m.type === 'in' ? 'Received (+)' : m.type === 'out' ? 'Sold (-)' : m.type}
                           </span>
-                          <span className="font-bold text-[#292929]">
+                          <span className="font-bold text-[#0F172A]">
                             {m.qty} {selectedProduct.unit}
                           </span>
                         </div>
-                        <p className="text-[11px] text-[#6B6B63] mt-0.5">{m.notes}</p>
+                        <p className="text-[11px] text-[#64748B] mt-0.5">{m.notes}</p>
                       </div>
-                      <span className="text-[10px] text-[#6B6B63]">
+                      <span className="text-[10px] text-[#64748B]">
                         {formatDateTime(m.created_at)}
                       </span>
                     </div>

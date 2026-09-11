@@ -54,7 +54,7 @@ export default function BrandLogo({
     <div className={`flex items-center space-x-3.5 select-none ${className}`}>
       {/* Official Grocery Bag Icon from uploaded artwork */}
       <div
-        className={`${s.box} flex-shrink-0 flex items-center justify-center overflow-hidden bg-[#FFF4D6] border border-[#E8E0CC] shadow-2xs transition-transform duration-200 group-hover:scale-105`}
+        className={`${s.box} flex-shrink-0 flex items-center justify-center overflow-hidden bg-amber-50/80 border border-amber-200/80 shadow-xs transition-transform duration-200 group-hover:scale-105`}
         title="NEBULA Supermarket"
       >
         <img
@@ -69,14 +69,14 @@ export default function BrandLogo({
         <div className="leading-tight overflow-hidden">
           <div
             className={`tracking-tight uppercase font-sans ${s.text} ${
-              isDark ? 'text-white' : 'text-[#292929]'
+              isDark ? 'text-white' : 'text-[#0F172A]'
             }`}
           >
             NEBULA
           </div>
           <div
             className={`font-extrabold uppercase font-sans ${s.sub} ${
-              isDark ? 'text-[#FFD84D]' : 'text-[#6B6B63]'
+              isDark ? 'text-amber-300' : 'text-[#15803D]'
             }`}
           >
             SUPERMARKET
@@ -84,7 +84,7 @@ export default function BrandLogo({
           {showTagline && (
             <p
               className={`font-medium tracking-wide mt-0.5 ${s.tag} ${
-                isDark ? 'text-amber-100' : 'text-[#6B6B63]'
+                isDark ? 'text-amber-100' : 'text-[#64748B]'
               }`}
             >
               Simplify. Manage. Grow.

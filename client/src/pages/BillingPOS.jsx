@@ -436,7 +436,7 @@ _Visit us again soon!_`;
   const activeCustomer = customers.find((c) => c.id === Number(selectedCustomerId));
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FFFAED]">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F8FAFC]">
       <Header
         title="Billing (POS Counter)"
         subtitle="High-speed retail cashier billing & live GST calculation"
@@ -447,22 +447,22 @@ _Visit us again soon!_`;
         {/* LEFT COLUMN: Product Catalog & Fast Picker (7 Cols) */}
         <div className="lg:col-span-7 flex flex-col space-y-3">
           {/* Search bar & Scan photo trigger */}
-          <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-[#E8E0CC] shadow-xs space-y-3">
+          <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-[#E2E8F0] shadow-xs space-y-3">
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-[#6B6B63] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   ref={searchInputRef}
                   type="text"
                   placeholder={t('pos_search_placeholder') || 'Search item by name, SKU or barcode...'}
                   value={productSearch}
                   onChange={(e) => setProductSearch(e.target.value)}
-                  className="w-full pl-10 pr-8 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl text-xs sm:text-sm text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] font-medium outline-hidden"
+                  className="w-full pl-10 pr-8 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl text-xs sm:text-sm text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D] font-medium outline-hidden"
                 />
                 {productSearch && (
                   <button
                     onClick={() => setProductSearch('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#6B6B63] hover:text-[#292929] font-bold"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#64748B] hover:text-[#0F172A] font-bold"
                   >
                     ✕
                   </button>
@@ -478,9 +478,9 @@ _Visit us again soon!_`;
                   setPhotoPreview(null);
                   setShowPhotoModal(true);
                 }}
-                className="flex items-center space-x-1.5 px-3 py-2 bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#287A4B] border border-[#E8E0CC] rounded-xl text-xs font-bold transition active:scale-95 flex-shrink-0"
+                className="flex items-center space-x-1.5 px-3 py-2 bg-[#F0FDF4] hover:bg-[#DCFCE7] text-[#15803D] border border-[#E2E8F0] rounded-xl text-xs font-bold transition active:scale-95 flex-shrink-0"
               >
-                <Camera className="w-4 h-4 text-[#287A4B]" />
+                <Camera className="w-4 h-4 text-[#15803D]" />
                 <span className="hidden sm:inline">Photo / Barcode</span>
               </button>
             </div>
@@ -493,8 +493,8 @@ _Visit us again soon!_`;
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition cursor-pointer ${
                     selectedCategory === cat.id
-                      ? 'bg-[#287A4B] text-white font-bold shadow-xs'
-                      : 'bg-[#FFFAED] text-[#6B6B63] hover:bg-slate-100 hover:text-[#292929] border border-[#E8E0CC]'
+                      ? 'bg-[#15803D] text-white font-bold shadow-xs'
+                      : 'bg-[#F8FAFC] text-[#64748B] hover:bg-slate-100 hover:text-[#0F172A] border border-[#E2E8F0]'
                   }`}
                 >
                   {cat.label}
@@ -502,16 +502,16 @@ _Visit us again soon!_`;
               ))}
             </div>
 
-            <div className="flex items-center justify-between text-[11px] text-[#6B6B63]">
+            <div className="flex items-center justify-between text-[11px] text-[#64748B]">
               <span>Showing {filteredProducts.length} products</span>
-              <span className="font-semibold text-[#287A4B]">Click an item card to add to bill</span>
+              <span className="font-semibold text-[#15803D]">Click an item card to add to bill</span>
             </div>
           </div>
 
           {/* Product Cards Grid */}
-          <div className="flex-1 bg-white p-3.5 sm:p-4 rounded-2xl border border-[#E8E0CC] shadow-xs overflow-y-auto max-h-[calc(100vh-270px)]">
+          <div className="flex-1 bg-white p-3.5 sm:p-4 rounded-2xl border border-[#E2E8F0] shadow-xs overflow-y-auto max-h-[calc(100vh-270px)]">
             {filteredProducts.length === 0 ? (
-              <div className="py-12 text-center text-[#6B6B63] text-xs">
+              <div className="py-12 text-center text-[#64748B] text-xs">
                 No products found matching "{productSearch}".
               </div>
             ) : (
@@ -527,13 +527,13 @@ _Visit us again soon!_`;
                       disabled={isOut}
                       className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                         isOut
-                          ? 'bg-slate-100 border-[#E8E0CC] opacity-60 cursor-not-allowed'
-                          : 'bg-[#FFFAED] hover:bg-white hover:border-[#287A4B] hover:shadow-card border-[#E8E0CC] active:scale-98'
+                          ? 'bg-slate-100 border-[#E2E8F0] opacity-60 cursor-not-allowed'
+                          : 'bg-[#F8FAFC] hover:bg-white hover:border-[#15803D] hover:shadow-card border-[#E2E8F0] active:scale-98'
                       }`}
                     >
                       <div>
                         <div className="flex items-start justify-between gap-1 mb-1">
-                          <span className="font-bold text-[#292929] text-xs line-clamp-2 leading-snug">
+                          <span className="font-bold text-[#0F172A] text-xs line-clamp-2 leading-snug">
                             {p.name}
                           </span>
                           {p.is_loose ? (
@@ -542,19 +542,19 @@ _Visit us again soon!_`;
                             </span>
                           ) : null}
                         </div>
-                        <div className="text-[10px] text-[#6B6B63] font-mono">
+                        <div className="text-[10px] text-[#64748B] font-mono">
                           HSN {p.hsn_code} • GST {p.gst_slab}%
                         </div>
                       </div>
 
-                      <div className="mt-3 pt-2 border-t border-[#E8E0CC] flex items-center justify-between">
-                        <div className="font-black text-[#287A4B] text-sm">
+                      <div className="mt-3 pt-2 border-t border-[#E2E8F0] flex items-center justify-between">
+                        <div className="font-black text-[#15803D] text-sm">
                           {formatINR(p.sell_price)}
-                          <span className="text-[10px] font-normal text-[#6B6B63]">/{p.unit}</span>
+                          <span className="text-[10px] font-normal text-[#64748B]">/{p.unit}</span>
                         </div>
                         <span
                           className={`text-[10px] font-bold ${
-                            isOut ? 'text-[#DC2626]' : isLow ? 'text-[#F28C28]' : 'text-[#287A4B]'
+                            isOut ? 'text-[#DC2626]' : isLow ? 'text-[#EA580C]' : 'text-[#15803D]'
                           }`}
                         >
                           {isOut ? 'Out of Stock' : `${formatQtyUnit(p.stock_qty, p.unit, p.is_loose)}`}
@@ -570,19 +570,19 @@ _Visit us again soon!_`;
 
         {/* RIGHT COLUMN: POS Active Cart & Checkout (5 Cols) */}
         <div className="lg:col-span-5 flex flex-col space-y-3">
-          <div className="bg-white rounded-2xl border border-[#E8E0CC] shadow-xs p-4 sm:p-5 flex-1 flex flex-col justify-between">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-xs p-4 sm:p-5 flex-1 flex flex-col justify-between">
             <div>
               {/* Cart Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E0CC]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#287A4B] flex items-center justify-center font-bold">
+                  <div className="w-8 h-8 rounded-xl bg-[#F0FDF4] text-[#15803D] flex items-center justify-center font-bold">
                     <ShoppingCart className="w-4 h-4" />
                   </div>
                   <div>
-                    <h2 className="font-bold text-[#292929] text-sm sm:text-base">
+                    <h2 className="font-bold text-[#0F172A] text-sm sm:text-base">
                       Current Bill Cart
                     </h2>
-                    <p className="text-[11px] text-[#6B6B63]">
+                    <p className="text-[11px] text-[#64748B]">
                       {cart.length} line item{cart.length !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -599,13 +599,13 @@ _Visit us again soon!_`;
               </div>
 
               {/* Customer Selector & WhatsApp Phone */}
-              <div className="py-3 border-b border-[#E8E0CC] space-y-2.5">
+              <div className="py-3 border-b border-[#E2E8F0] space-y-2.5">
                 <div className="flex items-center space-x-2">
-                  <User className="w-4 h-4 text-[#6B6B63]" />
+                  <User className="w-4 h-4 text-[#64748B]" />
                   <select
                     value={selectedCustomerId}
                     onChange={handleCustomerChange}
-                    className="w-full text-xs py-1.5 px-2.5 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-medium text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B]"
+                    className="w-full text-xs py-1.5 px-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-medium text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D]"
                   >
                     <option value="">Walk-in Customer (No Khata Credit)</option>
                     {customers.map((c) => (
@@ -624,7 +624,7 @@ _Visit us again soon!_`;
                       placeholder="Customer Name (optional for bill)"
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      className="w-full text-xs py-1 px-2.5 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-medium text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden placeholder:text-[#6B6B63]/60"
+                      className="w-full text-xs py-1 px-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-medium text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D] outline-hidden placeholder:text-[#64748B]/60"
                     />
                   </div>
                 )}
@@ -635,7 +635,7 @@ _Visit us again soon!_`;
                     <div className="relative flex-1">
                       <div className="absolute left-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
                         <MessageSquare className="w-3.5 h-3.5 text-[#25D366]" />
-                        <span className="text-[11px] font-bold text-[#6B6B63]">+91</span>
+                        <span className="text-[11px] font-bold text-[#64748B]">+91</span>
                       </div>
                       <input
                         type="tel"
@@ -643,23 +643,23 @@ _Visit us again soon!_`;
                         placeholder="WhatsApp Number (for e-bill)"
                         value={customerPhone}
                         onChange={(e) => setCustomerPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                        className="w-full pl-14 pr-3 py-1.5 text-xs bg-[#FFFAED] border border-[#E8E0CC] rounded-xl font-semibold text-[#292929] focus:ring-2 focus:ring-[#287A4B]/20 focus:border-[#287A4B] outline-hidden placeholder:text-[#6B6B63]/60 placeholder:font-normal"
+                        className="w-full pl-14 pr-3 py-1.5 text-xs bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl font-semibold text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D] outline-hidden placeholder:text-[#64748B]/60 placeholder:font-normal"
                       />
                     </div>
                     {customerPhone.length === 10 && (
-                      <span className="text-[10px] font-bold text-[#287A4B] bg-[#F0FDF4] px-2 py-1.5 rounded-xl border border-[#E8E0CC] flex items-center gap-1 flex-shrink-0">
-                        <Check className="w-3 h-3 text-[#287A4B]" />
+                      <span className="text-[10px] font-bold text-[#15803D] bg-[#F0FDF4] px-2 py-1.5 rounded-xl border border-[#E2E8F0] flex items-center gap-1 flex-shrink-0">
+                        <Check className="w-3 h-3 text-[#15803D]" />
                         <span>e-Bill Ready</span>
                       </span>
                     )}
                   </div>
 
-                  <label className="flex items-center space-x-2 text-[11px] text-[#6B6B63] cursor-pointer">
+                  <label className="flex items-center space-x-2 text-[11px] text-[#64748B] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={autoSendWhatsApp}
                       onChange={(e) => setAutoSendWhatsApp(e.target.checked)}
-                      className="rounded border-[#E8E0CC] text-[#25D366] focus:ring-[#25D366]"
+                      className="rounded border-[#E2E8F0] text-[#25D366] focus:ring-[#25D366]"
                     />
                     <span>Auto-send bill to customer WhatsApp on checkout</span>
                   </label>
@@ -687,9 +687,9 @@ _Visit us again soon!_`;
               )}
 
               {/* Cart Items List */}
-              <div className="py-2 overflow-y-auto max-h-56 divide-y divide-[#E8E0CC]/60">
+              <div className="py-2 overflow-y-auto max-h-56 divide-y divide-[#E2E8F0]/60">
                 {cart.length === 0 ? (
-                  <div className="py-10 text-center text-[#6B6B63] text-xs">
+                  <div className="py-10 text-center text-[#64748B] text-xs">
                     Cart is empty. Tap items in catalog to build bill.
                   </div>
                 ) : (
@@ -701,17 +701,17 @@ _Visit us again soon!_`;
                       <div key={idx} className="py-2.5 space-y-1.5">
                         <div className="flex items-start justify-between">
                           <div className="overflow-hidden pr-2">
-                            <span className="font-bold text-xs text-[#292929] block truncate">
+                            <span className="font-bold text-xs text-[#0F172A] block truncate">
                               {item.name}
                             </span>
-                            <span className="text-[10px] text-[#6B6B63] font-mono">
+                            <span className="text-[10px] text-[#64748B] font-mono">
                               GST {item.gst_slab}% (CGST {item.gst_slab / 2}% + SGST{' '}
                               {item.gst_slab / 2}%)
                             </span>
                           </div>
                           <button
                             onClick={() => removeFromCart(idx)}
-                            className="text-[#6B6B63] hover:text-[#DC2626] p-1 transition"
+                            className="text-[#64748B] hover:text-[#DC2626] p-1 transition"
                             title="Remove"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -723,7 +723,7 @@ _Visit us again soon!_`;
                           <div className="flex items-center space-x-1.5">
                             <button
                               onClick={() => updateQty(idx, -1)}
-                              className="w-7 h-7 rounded-lg bg-[#FFFAED] hover:bg-[#F0FDF4] border border-[#E8E0CC] flex items-center justify-center font-bold text-[#287A4B]"
+                              className="w-7 h-7 rounded-lg bg-[#F8FAFC] hover:bg-[#F0FDF4] border border-[#E2E8F0] flex items-center justify-center font-bold text-[#15803D]"
                             >
                               <Minus className="w-3 h-3" />
                             </button>
@@ -732,22 +732,22 @@ _Visit us again soon!_`;
                               step={item.is_loose ? '0.05' : '1'}
                               value={item.qty}
                               onChange={(e) => setExactQty(idx, e.target.value)}
-                              className="w-14 text-center py-1 border border-[#E8E0CC] rounded-lg font-bold text-xs bg-white text-[#292929]"
+                              className="w-14 text-center py-1 border border-[#E2E8F0] rounded-lg font-bold text-xs bg-white text-[#0F172A]"
                             />
-                            <span className="text-[10px] text-[#6B6B63] font-semibold">{item.unit}</span>
+                            <span className="text-[10px] text-[#64748B] font-semibold">{item.unit}</span>
                             <button
                               onClick={() => updateQty(idx, 1)}
-                              className="w-7 h-7 rounded-lg bg-[#FFFAED] hover:bg-[#F0FDF4] border border-[#E8E0CC] flex items-center justify-center font-bold text-[#287A4B]"
+                              className="w-7 h-7 rounded-lg bg-[#F8FAFC] hover:bg-[#F0FDF4] border border-[#E2E8F0] flex items-center justify-center font-bold text-[#15803D]"
                             >
                               <Plus className="w-3 h-3" />
                             </button>
                           </div>
 
                           <div className="text-right">
-                            <div className="font-black text-[#292929] text-xs">
+                            <div className="font-black text-[#0F172A] text-xs">
                               {formatINR(item.qty * item.unit_price)}
                             </div>
-                            <div className="text-[10px] text-[#6B6B63]">@ ₹{item.unit_price}</div>
+                            <div className="text-[10px] text-[#64748B]">@ ₹{item.unit_price}</div>
                           </div>
                         </div>
 
@@ -769,30 +769,30 @@ _Visit us again soon!_`;
             </div>
 
             {/* Live Bill Summary & Payment Section */}
-            <div className="pt-3 border-t border-[#E8E0CC] space-y-3">
+            <div className="pt-3 border-t border-[#E2E8F0] space-y-3">
               {/* Summary Card */}
-              <div className="p-3 bg-[#FFFAED] rounded-xl border border-[#E8E0CC] space-y-1.5 text-xs">
-                <div className="flex justify-between text-[#6B6B63]">
+              <div className="p-3 bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] space-y-1.5 text-xs">
+                <div className="flex justify-between text-[#64748B]">
                   <span>Taxable Subtotal:</span>
-                  <span className="font-semibold text-[#292929]">{formatINR(summary.subtotal)}</span>
+                  <span className="font-semibold text-[#0F172A]">{formatINR(summary.subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-[#6B6B63]">
+                <div className="flex justify-between text-[#64748B]">
                   <span>CGST (Intra-state):</span>
-                  <span className="font-semibold text-[#292929]">{formatINR(summary.cgstAmount)}</span>
+                  <span className="font-semibold text-[#0F172A]">{formatINR(summary.cgstAmount)}</span>
                 </div>
-                <div className="flex justify-between text-[#6B6B63]">
+                <div className="flex justify-between text-[#64748B]">
                   <span>SGST (Intra-state):</span>
-                  <span className="font-semibold text-[#292929]">{formatINR(summary.sgstAmount)}</span>
+                  <span className="font-semibold text-[#0F172A]">{formatINR(summary.sgstAmount)}</span>
                 </div>
                 {summary.roundOff !== 0 && (
-                  <div className="flex justify-between text-[#6B6B63] text-[11px]">
+                  <div className="flex justify-between text-[#64748B] text-[11px]">
                     <span>Round Off:</span>
                     <span>{formatINR(summary.roundOff)}</span>
                   </div>
                 )}
-                <div className="flex justify-between items-baseline pt-2 border-t border-[#E8E0CC] text-sm font-extrabold text-[#292929]">
+                <div className="flex justify-between items-baseline pt-2 border-t border-[#E2E8F0] text-sm font-extrabold text-[#0F172A]">
                   <span>Grand Total:</span>
-                  <span className="text-xl font-black text-[#287A4B]">
+                  <span className="text-xl font-black text-[#15803D]">
                     {formatINR(summary.totalAmount)}
                   </span>
                 </div>
@@ -800,7 +800,7 @@ _Visit us again soon!_`;
 
               {/* Payment Mode Selector */}
               <div>
-                <label className="block text-[10px] font-bold text-[#6B6B63] uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-1.5">
                   Payment Mode
                 </label>
                 <div className="grid grid-cols-4 gap-1.5 text-xs">
@@ -819,8 +819,8 @@ _Visit us again soon!_`;
                         onClick={() => setPaymentMode(m.id)}
                         className={`py-2 px-1 rounded-xl font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer ${
                           isActive
-                            ? 'bg-[#287A4B] text-white shadow-xs'
-                            : 'bg-[#FFFAED] text-[#6B6B63] hover:bg-[#F0FDF4] hover:text-[#287A4B] border border-[#E8E0CC]'
+                            ? 'bg-[#15803D] text-white shadow-xs'
+                            : 'bg-[#F8FAFC] text-[#64748B] hover:bg-[#F0FDF4] hover:text-[#15803D] border border-[#E2E8F0]'
                         }`}
                       >
                         <Icon className="w-3.5 h-3.5" />
@@ -842,19 +842,19 @@ _Visit us again soon!_`;
                     }
                     value={paymentRef}
                     onChange={(e) => setPaymentRef(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-[#FFFAED] border border-[#E8E0CC] rounded-xl outline-hidden text-[#292929]"
+                    className="w-full text-xs px-3 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl outline-hidden text-[#0F172A]"
                   />
                 </div>
               )}
 
               {/* Below cost override checkbox */}
-              <div className="flex items-center space-x-2 text-[11px] text-[#6B6B63]">
+              <div className="flex items-center space-x-2 text-[11px] text-[#64748B]">
                 <input
                   type="checkbox"
                   id="overrideBelowCost"
                   checked={allowBelowCost}
                   onChange={(e) => setAllowBelowCost(e.target.checked)}
-                  className="rounded border-[#E8E0CC] text-[#F28C28] focus:ring-[#F28C28]"
+                  className="rounded border-[#E2E8F0] text-[#EA580C] focus:ring-[#EA580C]"
                 />
                 <label htmlFor="overrideBelowCost" className="cursor-pointer">
                   Allow below-cost price override
@@ -865,7 +865,7 @@ _Visit us again soon!_`;
               <button
                 onClick={handleFinalizeBill}
                 disabled={submitting || cart.length === 0}
-                className="w-full py-3 bg-[#F28C28] hover:bg-[#E07D1E] disabled:opacity-50 text-white font-black rounded-xl shadow-xs hover:shadow-md transition active:scale-95 flex items-center justify-center space-x-2 text-sm cursor-pointer"
+                className="w-full py-3 bg-[#EA580C] hover:bg-[#E07D1E] disabled:opacity-50 text-white font-black rounded-xl shadow-xs hover:shadow-md transition active:scale-95 flex items-center justify-center space-x-2 text-sm cursor-pointer"
               >
                 {submitting ? (
                   <>
@@ -886,40 +886,40 @@ _Visit us again soon!_`;
         {/* MODAL: Bill Finalized Success */}
         {showSuccessModal && finalizedBill && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-card max-w-md w-full p-6 space-y-4 border border-[#E8E0CC] text-center">
-              <div className="w-12 h-12 rounded-2xl bg-[#F0FDF4] text-[#287A4B] flex items-center justify-center mx-auto border border-[#E8E0CC]">
+            <div className="bg-white rounded-3xl shadow-card max-w-md w-full p-6 space-y-4 border border-[#E2E8F0] text-center">
+              <div className="w-12 h-12 rounded-2xl bg-[#F0FDF4] text-[#15803D] flex items-center justify-center mx-auto border border-[#E2E8F0]">
                 <CheckCircle className="w-7 h-7" />
               </div>
 
               <div>
-                <h3 className="text-lg font-black text-[#292929]">Sale Finalized Successfully!</h3>
-                <p className="text-xs text-[#6B6B63] font-mono mt-0.5">
+                <h3 className="text-lg font-black text-[#0F172A]">Sale Finalized Successfully!</h3>
+                <p className="text-xs text-[#64748B] font-mono mt-0.5">
                   Invoice #{finalizedBill.bill_number}
                 </p>
               </div>
 
-              <div className="p-4 bg-[#FFFAED] rounded-2xl border border-[#E8E0CC] text-left space-y-2 text-xs">
+              <div className="p-4 bg-[#F8FAFC] rounded-2xl border border-[#E2E8F0] text-left space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-[#6B6B63]">Customer:</span>
-                  <span className="font-bold text-[#292929]">
+                  <span className="text-[#64748B]">Customer:</span>
+                  <span className="font-bold text-[#0F172A]">
                     {finalizedBill.customer_name || 'Walk-in'}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#6B6B63]">Payment Mode:</span>
-                  <span className="font-bold uppercase text-[#287A4B]">
+                  <span className="text-[#64748B]">Payment Mode:</span>
+                  <span className="font-bold uppercase text-[#15803D]">
                     {finalizedBill.payment_mode}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#6B6B63]">GST Breakdown:</span>
-                  <span className="font-semibold text-[#292929]">
+                  <span className="text-[#64748B]">GST Breakdown:</span>
+                  <span className="font-semibold text-[#0F172A]">
                     CGST: {formatINR(finalizedBill.cgst_amount)} | SGST: {formatINR(finalizedBill.sgst_amount)}
                   </span>
                 </div>
-                <div className="flex justify-between text-sm font-black pt-2 border-t border-[#E8E0CC]">
+                <div className="flex justify-between text-sm font-black pt-2 border-t border-[#E2E8F0]">
                   <span>Total Amount Paid:</span>
-                  <span className="text-[#287A4B]">{formatINR(finalizedBill.total_amount)}</span>
+                  <span className="text-[#15803D]">{formatINR(finalizedBill.total_amount)}</span>
                 </div>
               </div>
 
@@ -931,13 +931,13 @@ _Visit us again soon!_`;
                       <MessageSquare className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="font-bold text-xs text-[#292929]">Send WhatsApp Digital Bill</p>
-                      <p className="text-[10px] text-[#6B6B63]">Instant e-receipt with GST breakdown & PDF link</p>
+                      <p className="font-bold text-xs text-[#0F172A]">Send WhatsApp Digital Bill</p>
+                      <p className="text-[10px] text-[#64748B]">Instant e-receipt with GST breakdown & PDF link</p>
                     </div>
                   </div>
                   {whatsAppSent && (
-                    <span className="text-[10px] font-bold text-[#287A4B] bg-white px-2 py-0.5 rounded-lg border border-[#E8E0CC] flex items-center gap-1">
-                      <Check className="w-3 h-3 text-[#287A4B]" />
+                    <span className="text-[10px] font-bold text-[#15803D] bg-white px-2 py-0.5 rounded-lg border border-[#E2E8F0] flex items-center gap-1">
+                      <Check className="w-3 h-3 text-[#15803D]" />
                       Opened
                     </span>
                   )}
@@ -945,7 +945,7 @@ _Visit us again soon!_`;
 
                 <div className="flex items-center gap-2">
                   <div className="relative flex-1">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-[#6B6B63]">
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-[#64748B]">
                       +91
                     </span>
                     <input
@@ -954,7 +954,7 @@ _Visit us again soon!_`;
                       placeholder="WhatsApp phone number"
                       value={successModalPhone}
                       onChange={(e) => setSuccessModalPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                      className="w-full text-xs pl-10 pr-3 py-2 bg-white border border-[#E8E0CC] rounded-xl font-bold text-[#292929] outline-hidden focus:border-[#287A4B]"
+                      className="w-full text-xs pl-10 pr-3 py-2 bg-white border border-[#E2E8F0] rounded-xl font-bold text-[#0F172A] outline-hidden focus:border-[#15803D]"
                     />
                   </div>
                   <button
@@ -974,14 +974,14 @@ _Visit us again soon!_`;
                   href={`/api/invoices/${finalizedBill.id}/pdf`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 py-2.5 bg-[#287A4B] hover:bg-[#287A4B] text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-xs transition"
+                  className="flex-1 py-2.5 bg-[#15803D] hover:bg-[#15803D] text-white font-bold rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-xs transition"
                 >
                   <Download className="w-4 h-4" />
                   <span>Download GST Invoice PDF</span>
                 </a>
                 <button
                   onClick={() => setShowSuccessModal(false)}
-                  className="px-4 py-2.5 bg-[#FFFAED] hover:bg-slate-100 text-[#292929] border border-[#E8E0CC] font-bold rounded-xl text-xs"
+                  className="px-4 py-2.5 bg-[#F8FAFC] hover:bg-slate-100 text-[#0F172A] border border-[#E2E8F0] font-bold rounded-xl text-xs"
                 >
                   New Bill
                 </button>
@@ -993,21 +993,21 @@ _Visit us again soon!_`;
         {/* MODAL: Photo & Barcode Vision Scanner */}
         {showPhotoModal && (
           <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl shadow-card max-w-lg w-full p-6 space-y-4 border border-[#E8E0CC]">
-              <div className="flex items-center justify-between pb-3 border-b border-[#E8E0CC]">
+            <div className="bg-white rounded-3xl shadow-card max-w-lg w-full p-6 space-y-4 border border-[#E2E8F0]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0]">
                 <div className="flex items-center space-x-2">
-                  <Camera className="w-5 h-5 text-[#287A4B]" />
-                  <h3 className="font-bold text-[#292929] text-base">Photo & Barcode Scanner</h3>
+                  <Camera className="w-5 h-5 text-[#15803D]" />
+                  <h3 className="font-bold text-[#0F172A] text-base">Photo & Barcode Scanner</h3>
                 </div>
                 <button
                   onClick={() => setShowPhotoModal(false)}
-                  className="p-1 text-[#6B6B63] hover:text-[#292929] rounded-lg hover:bg-slate-100"
+                  className="p-1 text-[#64748B] hover:text-[#0F172A] rounded-lg hover:bg-slate-100"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <p className="text-xs text-[#6B6B63]">
+              <p className="text-xs text-[#64748B]">
                 Capture product packaging or barcodes directly with your device camera to identify and bill immediately.
               </p>
 
@@ -1026,21 +1026,21 @@ _Visit us again soon!_`;
               {!photoPreview ? (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-[#E8E0CC] hover:border-[#287A4B] rounded-2xl p-8 text-center cursor-pointer transition bg-[#FFFAED] hover:bg-[#F0FDF4] flex flex-col items-center justify-center space-y-2.5"
+                  className="border-2 border-dashed border-[#E2E8F0] hover:border-[#15803D] rounded-2xl p-8 text-center cursor-pointer transition bg-[#F8FAFC] hover:bg-[#F0FDF4] flex flex-col items-center justify-center space-y-2.5"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-white shadow-xs flex items-center justify-center text-[#287A4B]">
+                  <div className="w-12 h-12 rounded-2xl bg-white shadow-xs flex items-center justify-center text-[#15803D]">
                     <Camera className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="font-bold text-[#292929] text-sm">Tap to Take Photo or Upload</p>
-                    <p className="text-[11px] text-[#6B6B63] mt-0.5">
+                    <p className="font-bold text-[#0F172A] text-sm">Tap to Take Photo or Upload</p>
+                    <p className="text-[11px] text-[#64748B] mt-0.5">
                       Supports packaging photos, camera snapshots & barcodes
                     </p>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <div className="relative rounded-2xl overflow-hidden max-h-56 bg-slate-900 flex items-center justify-center border border-[#E8E0CC]">
+                  <div className="relative rounded-2xl overflow-hidden max-h-56 bg-slate-900 flex items-center justify-center border border-[#E2E8F0]">
                     <img
                       src={photoPreview}
                       alt="Scanned product"
@@ -1048,7 +1048,7 @@ _Visit us again soon!_`;
                     />
                     {photoAnalyzing && (
                       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs flex flex-col items-center justify-center text-white space-y-2">
-                        <Sparkles className="w-8 h-8 text-[#287A4B] animate-spin" />
+                        <Sparkles className="w-8 h-8 text-[#15803D] animate-spin" />
                         <span className="text-xs font-bold">Analyzing product photo...</span>
                       </div>
                     )}
@@ -1062,32 +1062,32 @@ _Visit us again soon!_`;
                   )}
 
                   {photoResult && photoResult.product && (
-                    <div className="p-4 bg-[#F0FDF4] rounded-2xl border border-[#E8E0CC] space-y-2">
+                    <div className="p-4 bg-[#F0FDF4] rounded-2xl border border-[#E2E8F0] space-y-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-1.5 text-[#287A4B] font-bold text-xs">
-                          <CheckCircle className="w-4 h-4 text-[#287A4B]" />
+                        <div className="flex items-center space-x-1.5 text-[#15803D] font-bold text-xs">
+                          <CheckCircle className="w-4 h-4 text-[#15803D]" />
                           <span>Product Identified</span>
                         </div>
-                        <span className="text-[10px] font-bold text-[#287A4B] bg-[#DCFCE7] px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold text-[#15803D] bg-[#DCFCE7] px-2 py-0.5 rounded-full">
                           Confidence: {photoResult.details?.confidence_percentage || 95}%
                         </span>
                       </div>
 
-                      <div className="bg-white p-3 rounded-xl border border-[#E8E0CC] flex items-center justify-between">
+                      <div className="bg-white p-3 rounded-xl border border-[#E2E8F0] flex items-center justify-between">
                         <div>
-                          <div className="font-bold text-[#292929] text-sm">
+                          <div className="font-bold text-[#0F172A] text-sm">
                             {photoResult.product.name}
                           </div>
-                          <div className="text-[11px] text-[#6B6B63]">
+                          <div className="text-[11px] text-[#64748B]">
                             SKU: {photoResult.product.sku} • In Stock: {photoResult.product.stock_qty}{' '}
                             {photoResult.product.unit}
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-black text-[#287A4B] text-base">
+                          <div className="font-black text-[#15803D] text-base">
                             {formatINR(photoResult.product.sell_price)}
                           </div>
-                          <div className="text-[10px] text-[#6B6B63]">
+                          <div className="text-[10px] text-[#64748B]">
                             GST: {photoResult.product.gst_slab}%
                           </div>
                         </div>
@@ -1104,7 +1104,7 @@ _Visit us again soon!_`;
                         setPhotoError('');
                         fileInputRef.current?.click();
                       }}
-                      className="px-3 py-2 bg-[#FFFAED] hover:bg-slate-100 text-[#292929] font-bold rounded-xl text-xs border border-[#E8E0CC]"
+                      className="px-3 py-2 bg-[#F8FAFC] hover:bg-slate-100 text-[#0F172A] font-bold rounded-xl text-xs border border-[#E2E8F0]"
                     >
                       Scan Another
                     </button>
@@ -1113,7 +1113,7 @@ _Visit us again soon!_`;
                       <button
                         type="button"
                         onClick={handleAddIdentifiedProduct}
-                        className="px-5 py-2.5 bg-[#F28C28] hover:bg-[#E07D1E] text-white font-bold rounded-xl text-xs shadow-xs transition active:scale-95 flex items-center space-x-1.5"
+                        className="px-5 py-2.5 bg-[#EA580C] hover:bg-[#E07D1E] text-white font-bold rounded-xl text-xs shadow-xs transition active:scale-95 flex items-center space-x-1.5"
                       >
                         <Plus className="w-4 h-4" />
                         <span>Add to Bill</span>

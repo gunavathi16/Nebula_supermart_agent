@@ -118,7 +118,7 @@ export default function AgentChat({ onToggleSidebar }) {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#FFFAED]">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#F8FAFC]">
       <Header
         title="NEBULA AI Store Assistant"
         subtitle="Conversational supermarket operations, instant billing, stock alerts & Khata queries"
@@ -127,23 +127,23 @@ export default function AgentChat({ onToggleSidebar }) {
 
       <main className="flex-1 p-4 sm:p-6 max-w-5xl mx-auto w-full flex flex-col space-y-4">
         {/* Brand Banner Card */}
-        <div className="bg-white rounded-2xl border border-[#E8E0CC] p-4 sm:p-5 shadow-xs flex items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 sm:p-5 shadow-xs flex items-center justify-between gap-4">
           <div className="flex items-center space-x-3.5">
-            <div className="w-11 h-11 rounded-xl bg-[#F0FDF4] border border-[#E8E0CC] flex items-center justify-center text-[#287A4B]">
-              <Sparkles className="w-6 h-6 text-[#287A4B]" />
+            <div className="w-11 h-11 rounded-xl bg-[#F0FDF4] border border-[#E2E8F0] flex items-center justify-center text-[#15803D]">
+              <Sparkles className="w-6 h-6 text-[#15803D]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-black text-base text-[#292929]">NEBULA AI</h2>
-                <span className="text-[10px] font-bold text-[#287A4B] bg-[#F0FDF4] px-2 py-0.5 rounded-full border border-[#E8E0CC]">
+                <h2 className="font-black text-base text-[#0F172A]">NEBULA AI</h2>
+                <span className="text-[10px] font-bold text-[#15803D] bg-[#F0FDF4] px-2 py-0.5 rounded-full border border-[#E2E8F0]">
                   Online • Store Munimji
                 </span>
               </div>
-              <p className="text-xs text-[#6B6B63]">Your smart store assistant.</p>
+              <p className="text-xs text-[#64748B]">Your smart store assistant.</p>
             </div>
           </div>
 
-          <div className="hidden sm:flex items-center text-xs text-[#6B6B63]">
+          <div className="hidden sm:flex items-center text-xs text-[#64748B]">
             <span>100% Real-time Store Database Grounded</span>
           </div>
         </div>
@@ -154,18 +154,18 @@ export default function AgentChat({ onToggleSidebar }) {
             <button
               key={idx}
               onClick={() => handleSend(card.title)}
-              className="p-3 bg-white hover:bg-[#F0FDF4] border border-[#E8E0CC] hover:border-[#E8E0CC] rounded-xl text-left transition cursor-pointer group shadow-xs active:scale-98"
+              className="p-3 bg-white hover:bg-[#F0FDF4] border border-[#E2E8F0] hover:border-[#E2E8F0] rounded-xl text-left transition cursor-pointer group shadow-xs active:scale-98"
             >
-              <p className="font-bold text-xs text-[#292929] group-hover:text-[#287A4B] transition">
+              <p className="font-bold text-xs text-[#0F172A] group-hover:text-[#15803D] transition">
                 "{card.title}"
               </p>
-              <p className="text-[10px] text-[#6B6B63] mt-1">{card.desc}</p>
+              <p className="text-[10px] text-[#64748B] mt-1">{card.desc}</p>
             </button>
           ))}
         </div>
 
         {/* Chat History Box */}
-        <div className="flex-1 bg-white rounded-2xl border border-[#E8E0CC] shadow-xs p-4 sm:p-6 overflow-y-auto max-h-[calc(100vh-420px)] min-h-[360px] space-y-4">
+        <div className="flex-1 bg-white rounded-2xl border border-[#E2E8F0] shadow-xs p-4 sm:p-6 overflow-y-auto max-h-[calc(100vh-420px)] min-h-[360px] space-y-4">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -174,24 +174,24 @@ export default function AgentChat({ onToggleSidebar }) {
               }`}
             >
               {msg.sender === 'bot' && (
-                <div className="w-8 h-8 rounded-xl bg-[#287A4B] text-white flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Bot className="w-4 h-4 text-[#287A4B]" />
+                <div className="w-8 h-8 rounded-xl bg-[#15803D] text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Bot className="w-4 h-4 text-[#15803D]" />
                 </div>
               )}
 
               <div
                 className={`max-w-xl rounded-2xl p-4 text-xs sm:text-sm space-y-2.5 ${
                   msg.sender === 'user'
-                    ? 'bg-[#287A4B] text-white font-medium rounded-tr-none shadow-xs'
-                    : 'bg-[#FFFAED] border border-[#E8E0CC] text-[#292929] rounded-tl-none'
+                    ? 'bg-[#15803D] text-white font-medium rounded-tr-none shadow-xs'
+                    : 'bg-[#F8FAFC] border border-[#E2E8F0] text-[#0F172A] rounded-tl-none'
                 }`}
               >
                 <div className="whitespace-pre-line leading-relaxed font-sans">{msg.text}</div>
 
                 {/* Attached Documents (PDFs / PPTX Decks) */}
                 {msg.documents && msg.documents.length > 0 && (
-                  <div className="space-y-2 pt-2 border-t border-[#E8E0CC]">
-                    <div className="text-[10px] font-bold text-[#6B6B63] uppercase tracking-wider">
+                  <div className="space-y-2 pt-2 border-t border-[#E2E8F0]">
+                    <div className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">
                       Generated Documents:
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -201,12 +201,12 @@ export default function AgentChat({ onToggleSidebar }) {
                           href={doc.downloadUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center space-x-2 px-3 py-1.5 bg-white hover:bg-[#F0FDF4] text-[#287A4B] border border-[#E8E0CC] rounded-xl font-bold text-xs transition shadow-xs"
+                          className="inline-flex items-center space-x-2 px-3 py-1.5 bg-white hover:bg-[#F0FDF4] text-[#15803D] border border-[#E2E8F0] rounded-xl font-bold text-xs transition shadow-xs"
                         >
                           {doc.type === 'pdf' ? (
-                            <FileText className="w-4 h-4 text-[#F28C28]" />
+                            <FileText className="w-4 h-4 text-[#EA580C]" />
                           ) : (
-                            <Presentation className="w-4 h-4 text-[#287A4B]" />
+                            <Presentation className="w-4 h-4 text-[#15803D]" />
                           )}
                           <span>{doc.caption || doc.filename}</span>
                           <Download className="w-3.5 h-3.5 ml-1" />
@@ -221,11 +221,11 @@ export default function AgentChat({ onToggleSidebar }) {
 
           {sending && (
             <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 rounded-xl bg-[#287A4B] text-white flex items-center justify-center flex-shrink-0">
-                <RefreshCw className="w-4 h-4 animate-spin text-[#287A4B]" />
+              <div className="w-8 h-8 rounded-xl bg-[#15803D] text-white flex items-center justify-center flex-shrink-0">
+                <RefreshCw className="w-4 h-4 animate-spin text-[#15803D]" />
               </div>
-              <div className="bg-[#FFFAED] border border-[#E8E0CC] p-3 rounded-2xl rounded-tl-none text-xs text-[#6B6B63] flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-[#287A4B] animate-ping"></span>
+              <div className="bg-[#F8FAFC] border border-[#E2E8F0] p-3 rounded-2xl rounded-tl-none text-xs text-[#64748B] flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-[#15803D] animate-ping"></span>
                 <span>NEBULA AI is processing your store instruction...</span>
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function AgentChat({ onToggleSidebar }) {
             <button
               key={idx}
               onClick={() => handleSend(q)}
-              className="px-3 py-1 bg-white hover:bg-[#F0FDF4] text-[#6B6B63] hover:text-[#287A4B] border border-[#E8E0CC] hover:border-[#E8E0CC] rounded-xl font-medium whitespace-nowrap transition cursor-pointer active:scale-95"
+              className="px-3 py-1 bg-white hover:bg-[#F0FDF4] text-[#64748B] hover:text-[#15803D] border border-[#E2E8F0] hover:border-[#E2E8F0] rounded-xl font-medium whitespace-nowrap transition cursor-pointer active:scale-95"
             >
               {q}
             </button>
@@ -248,7 +248,7 @@ export default function AgentChat({ onToggleSidebar }) {
         </div>
 
         {/* Input Bar */}
-        <div className="bg-white p-3 rounded-2xl border border-[#E8E0CC] shadow-xs flex items-center space-x-2">
+        <div className="bg-white p-3 rounded-2xl border border-[#E2E8F0] shadow-xs flex items-center space-x-2">
           <input
             type="text"
             value={input}
@@ -256,13 +256,13 @@ export default function AgentChat({ onToggleSidebar }) {
             onKeyDown={handleKeyDown}
             disabled={sending}
             placeholder="Type your request (e.g., 'make a bill: 2kg sugar, 4 Maggi, UPI' or 'today sales')..."
-            className="flex-1 px-3 py-2 text-xs sm:text-sm bg-transparent outline-hidden text-[#292929] placeholder-[#6B6B63]"
+            className="flex-1 px-3 py-2 text-xs sm:text-sm bg-transparent outline-hidden text-[#0F172A] placeholder-[#64748B]"
           />
 
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || sending}
-            className="px-4 py-2.5 bg-[#F28C28] hover:bg-[#E07D1E] disabled:opacity-40 text-white font-bold rounded-xl text-xs flex items-center space-x-1.5 shadow-xs transition active:scale-95 cursor-pointer"
+            className="px-4 py-2.5 bg-[#EA580C] hover:bg-[#E07D1E] disabled:opacity-40 text-white font-bold rounded-xl text-xs flex items-center space-x-1.5 shadow-xs transition active:scale-95 cursor-pointer"
           >
             <span>Send</span>
             <Send className="w-3.5 h-3.5" />

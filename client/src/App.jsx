@@ -68,7 +68,7 @@ function AppLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#FFFAED] text-[#292929]">
+    <div className="flex h-screen overflow-hidden bg-[#F8FAFC] text-[#0F172A]">
       <Sidebar
         lowStockCount={lowStockCount}
         isOpen={sidebarOpen}
