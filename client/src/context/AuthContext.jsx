@@ -16,9 +16,9 @@ export function AuthProvider({ children }) {
         return parsed;
       } catch (e) {}
     }
-    return { id: 1, username: 'admin', name: 'Guna (Owner)', role: 'owner' };
+    return null;
   });
-  const [token, setToken] = useState(() => localStorage.getItem('kirana_token') || 'demo-token');
+  const [token, setToken] = useState(() => localStorage.getItem('kirana_token') || null);
 
   useEffect(() => {
     if (token) {
@@ -41,6 +41,26 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const register = async (nameOrData, username, password, role = 'staff') => {
+    let payload;
+    if (typeof nameOrData === 'object' && nameOrData !== null) {
+      payload = nameOrData;
+    } else {
+      payload = { name: nameOrData, username, password, role };
+    }
+
+    try {
+      const res = await axios.post('/api/auth/register', payload);
+      setUser(res.data.user);
+      setToken(res.data.token);
+      localStorage.setItem('kirana_user', JSON.stringify(res.data.user));
+      localStorage.setItem('kirana_token', res.data.token);
+      return { success: true, user: res.data.user };
+    } catch (err) {
+      return { success: false, error: err.response?.data?.error || 'Registration failed' };
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -49,7 +69,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
