@@ -1,7 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { initDatabase } from './db/database.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import { db, initDatabase } from './db/database.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const clientDist = path.resolve(__dirname, '../client/dist');
 
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
@@ -16,7 +23,8 @@ dotenv.config();
 dotenv.config({ path: '../bot/.env' });
 
 const app = express();
-const PORT = process.env.SERVER_PORT || 5000;
+const isLocal = !process.env.RENDER && !process.env.RAILWAY_ENVIRONMENT && process.env.NODE_ENV !== 'production';
+const PORT = process.env.SERVER_PORT || (isLocal ? 5000 : process.env.PORT) || 5000;
 
 // Middleware
 app.use(cors({ origin: '*' }));
@@ -44,6 +52,27 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Auto-seed database if empty (e.g. fresh production deployment)
+try {
+  const row = db.prepare('SELECT COUNT(*) as count FROM products').get();
+  if (!row || row.count === 0) {
+    console.log('Database empty, auto-seeding catalog...');
+    const { seed } = await import('./db/seed.js');
+    seed();
+  }
+} catch (err) {
+  console.warn('Auto-seed check:', err.message);
+}
+
+// Serve client static build in production
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) return next();
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

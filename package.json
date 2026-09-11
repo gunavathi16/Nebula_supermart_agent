@@ -5,13 +5,16 @@
   "private": true,
   "scripts": {
     "install:all": "npm install && npm install --prefix server && npm install --prefix client && npm install --prefix bot",
+    "build": "npm run install:all && npm run build --prefix client",
+    "start": "node server/index.js",
+    "start:all": "concurrently -n \"SERVER,BOT\" -c \"cyan,yellow\" \"node server/index.js\" \"node bot/bot.js\"",
     "dev": "concurrently -n \"SERVER,CLIENT,BOT\" -c \"cyan,green,yellow\" \"npm run dev --prefix server\" \"npm run dev --prefix client\" \"node bot/bot.js\"",
     "bot": "node bot/bot.js",
     "bot:test": "node bot/test/agent.test.js",
     "seed": "node server/db/seed.js",
     "test": "node server/test/domain.test.js && node bot/test/agent.test.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "concurrently": "^9.1.2"
   }
 }

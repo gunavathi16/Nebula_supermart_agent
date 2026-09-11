@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: nebula-supermarket
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm run start:all
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LLM_PROVIDER
+        value: google
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
