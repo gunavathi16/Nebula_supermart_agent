@@ -319,14 +319,23 @@ if (config.webhookUrl) {
   // Long polling for local development or testing
   if (config.telegramToken && config.telegramToken !== 'DUMMY_TOKEN_FOR_INITIALIZATION') {
     console.log('Starting Telegram Bot in Long Polling mode...');
-    bot.start();
-    startWeeklyReportScheduler(bot);
+    bot.start({
+      onStart: (botInfo) => {
+        console.log(`Telegram Bot @${botInfo.username} started in polling mode`);
+        startWeeklyReportScheduler(bot);
+      }
+    }).catch((err) => {
+      console.warn('[Telegram Polling Notice]: Polling failed or invalid token:', err.message);
+    });
   } else {
     console.log('Telegram bot module initialized (Awaiting TELEGRAM_BOT_TOKEN in .env).');
   }
 
-  app.listen(config.port, () => {
+  const server = app.listen(config.port, () => {
     console.log(`Agent status & test server listening on port ${config.port}`);
+  });
+  server.on('error', (err) => {
+    console.warn(`[Agent Server Notice]: Port ${config.port} unavailable: ${err.message}. Main app continues.`);
   });
 }
 

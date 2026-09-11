@@ -67,10 +67,26 @@ try {
 
 // Serve client static build in production
 if (fs.existsSync(clientDist)) {
+  console.log(`Serving client static assets from ${clientDist}`);
   app.use(express.static(clientDist));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api/')) return next();
     res.sendFile(path.join(clientDist, 'index.html'));
+  });
+} else {
+  console.warn(`WARNING: Client build directory not found at ${clientDist}.`);
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) return next();
+    res.status(503).send(`
+      <!DOCTYPE html>
+      <html>
+        <head><title>Nebula Supermarket</title></head>
+        <body style="font-family:sans-serif; text-align:center; padding:50px;">
+          <h2>Nebula Supermarket POS API is Online</h2>
+          <p>Client build directory was not detected. Please verify that <code>npm run build</code> ran successfully.</p>
+        </body>
+      </html>
+    `);
   });
 }
 
