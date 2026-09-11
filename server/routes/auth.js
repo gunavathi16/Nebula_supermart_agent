@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db } from '../db/database.js';
 import { generateToken, authenticate } from '../middleware/auth.js';
+import { emptyStoreCatalog } from '../services/catalogService.js';
 
 const router = Router();
 
@@ -31,7 +32,7 @@ router.post('/login', (req, res) => {
 
 // Register new user
 router.post('/register', (req, res) => {
-  const { username, password, name, role } = req.body;
+  const { username, password, name, role, companyId, companyName, emptyStock } = req.body;
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
@@ -65,6 +66,16 @@ router.post('/register', (req, res) => {
     const newUser = db.prepare(`SELECT id, username, name, role FROM users WHERE id = ?`).get(result.lastInsertRowid);
     const token = generateToken(newUser);
 
+    // If emptyStock requested or new company/market identity provided, empty demo stock
+    if (emptyStock || companyId || companyName) {
+      try {
+        emptyStoreCatalog({ companyId, companyName });
+        console.log(`[Store Onboarding]: Initialized fresh catalog for company "${companyName || companyId || cleanUsername}".`);
+      } catch (catErr) {
+        console.warn('Catalog empty warning during register:', catErr.message);
+      }
+    }
+
     res.status(201).json({
       token,
       user: {
@@ -73,6 +84,7 @@ router.post('/register', (req, res) => {
         name: newUser.name,
         role: newUser.role
       },
+      stockEmptied: !!(emptyStock || companyId || companyName),
       message: 'Account registered successfully'
     });
   } catch (err) {

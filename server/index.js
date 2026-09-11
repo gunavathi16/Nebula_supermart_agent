@@ -53,13 +53,18 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Auto-seed database if empty (e.g. fresh production deployment)
+// Auto-seed database if fresh deployment and not marked clean
 try {
-  const row = db.prepare('SELECT COUNT(*) as count FROM products').get();
-  if (!row || row.count === 0) {
-    console.log('Database empty, auto-seeding catalog...');
-    const { seed } = await import('./db/seed.js');
-    seed();
+  const cleanSetting = db.prepare("SELECT value FROM settings WHERE key = 'clean_store'").get();
+  if (cleanSetting && cleanSetting.value === '1') {
+    console.log('Clean store configured: skipping demo auto-seed.');
+  } else {
+    const row = db.prepare('SELECT COUNT(*) as count FROM products').get();
+    if (!row || row.count === 0) {
+      console.log('Database empty and not marked clean, auto-seeding sample demo catalog...');
+      const { seed } = await import('./db/seed.js');
+      seed();
+    }
   }
 } catch (err) {
   console.warn('Auto-seed check:', err.message);

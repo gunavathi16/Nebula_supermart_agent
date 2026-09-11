@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, ArrowRight, ShieldCheck, UserPlus, LogIn, Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
+import { User, Lock, ArrowRight, ShieldCheck, UserPlus, LogIn, Eye, EyeOff, CheckCircle2, AlertCircle, Building2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import BrandLogo from '../components/BrandLogo';
 
@@ -21,8 +21,13 @@ export default function Login() {
   const [regUsername, setRegUsername] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
-  const [regRole, setRegRole] = useState('staff');
+  const [regRole, setRegRole] = useState('owner');
   const [showRegPassword, setShowRegPassword] = useState(false);
+
+  // Company / Market Setup
+  const [companyName, setCompanyName] = useState('');
+  const [companyId, setCompanyId] = useState('');
+  const [emptyStock, setEmptyStock] = useState(true);
 
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -85,13 +90,19 @@ export default function Login() {
       name: regName.trim() || regUsername.trim(),
       username: regUsername.trim(),
       password: regPassword,
-      role: regRole
+      role: regRole,
+      companyName: companyName.trim(),
+      companyId: companyId.trim(),
+      emptyStock: emptyStock
     });
 
     setSubmitting(false);
 
     if (res.success) {
-      setSuccessMsg('Account registered successfully! Redirecting to counter...');
+      const msg = emptyStock
+        ? 'Account created with a fresh, empty catalog! Redirecting to setup...'
+        : 'Account registered successfully! Redirecting to counter...';
+      setSuccessMsg(msg);
       setTimeout(() => {
         navigate('/');
       }, 700);
@@ -228,7 +239,7 @@ export default function Login() {
 
         {/* REGISTER FORM */}
         {mode === 'register' && (
-          <form onSubmit={handleRegister} className="space-y-3.5 text-xs">
+          <form onSubmit={handleRegister} className="space-y-3 text-xs">
             <div>
               <label className="block font-bold text-[#0F172A] mb-1">Full Name</label>
               <div className="relative">
@@ -260,26 +271,39 @@ export default function Login() {
               </div>
             </div>
 
+            {/* Optional Company ID & Market Name */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <div>
+                <label className="block font-bold text-[#0F172A] mb-1 flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5 text-[#15803D]" />
+                  <span>Company / Store ID</span>
+                </label>
+                <input
+                  type="text"
+                  value={companyId}
+                  onChange={(e) => setCompanyId(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50/70 border border-[#E2E8F0] rounded-xl font-medium text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D] outline-hidden transition font-mono"
+                  placeholder="e.g. MART-01"
+                />
+              </div>
+              <div>
+                <label className="block font-bold text-[#0F172A] mb-1">
+                  Market / Store Name
+                </label>
+                <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50/70 border border-[#E2E8F0] rounded-xl font-medium text-[#0F172A] focus:ring-2 focus:ring-[#15803D]/20 focus:border-[#15803D] outline-hidden transition"
+                  placeholder="e.g. Sri Lakshmi Mart"
+                />
+              </div>
+            </div>
+
             {/* Role Selection */}
             <div>
-              <label className="block font-bold text-[#0F172A] mb-1.5">Supermarket Role</label>
+              <label className="block font-bold text-[#0F172A] mb-1">Supermarket Role</label>
               <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRegRole('staff')}
-                  className={`p-2.5 rounded-xl border text-left transition cursor-pointer ${
-                    regRole === 'staff'
-                      ? 'bg-emerald-50 border-emerald-500 text-[#0F172A] ring-1 ring-emerald-500'
-                      : 'bg-white border-[#E2E8F0] text-[#64748B] hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="font-bold text-xs text-[#0F172A] flex items-center gap-1">
-                    <span>🏷️</span>
-                    <span>Billing Staff</span>
-                  </div>
-                  <p className="text-[10px] text-[#64748B] mt-0.5">POS & billing counter</p>
-                </button>
-
                 <button
                   type="button"
                   onClick={() => setRegRole('owner')}
@@ -293,10 +317,44 @@ export default function Login() {
                     <span>👑</span>
                     <span>Store Owner</span>
                   </div>
-                  <p className="text-[10px] text-[#64748B] mt-0.5">Full admin & reports</p>
+                  <p className="text-[10px] text-[#64748B] mt-0.5">Full admin & stock setup</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setRegRole('staff')}
+                  className={`p-2.5 rounded-xl border text-left transition cursor-pointer ${
+                    regRole === 'staff'
+                      ? 'bg-emerald-50 border-emerald-500 text-[#0F172A] ring-1 ring-emerald-500'
+                      : 'bg-white border-[#E2E8F0] text-[#64748B] hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="font-bold text-xs text-[#0F172A] flex items-center gap-1">
+                    <span>🏷️</span>
+                    <span>Billing Staff</span>
+                  </div>
+                  <p className="text-[10px] text-[#64748B] mt-0.5">POS & counter billing</p>
                 </button>
               </div>
             </div>
+
+            {/* Empty Stock / New Store Option */}
+            <label className="flex items-start gap-2.5 p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={emptyStock}
+                onChange={(e) => setEmptyStock(e.target.checked)}
+                className="mt-0.5 w-4 h-4 text-[#15803D] rounded border-[#E2E8F0] focus:ring-[#15803D] cursor-pointer"
+              />
+              <div>
+                <p className="font-bold text-[#0F172A] text-[11px] leading-tight">
+                  Empty stock for fresh store (Upload our market products)
+                </p>
+                <p className="text-[10px] text-[#64748B] mt-0.5 leading-snug">
+                  Clears demo items so your store starts clean and ready for your own inventory.
+                </p>
+              </div>
+            </label>
 
             <div>
               <label className="block font-bold text-[#0F172A] mb-1">Password</label>
@@ -344,7 +402,7 @@ export default function Login() {
               className="w-full py-2.5 bg-[#15803D] hover:bg-[#166534] text-white font-bold rounded-xl shadow-xs hover:shadow-md flex items-center justify-center space-x-2 text-sm transition active:scale-95 cursor-pointer disabled:opacity-60 mt-1"
             >
               <UserPlus className="w-4 h-4" />
-              <span>{submitting ? 'Registering...' : 'Register & Access Counter'}</span>
+              <span>{submitting ? 'Setting up store...' : 'Register & Set Up Store'}</span>
             </button>
 
             <div className="pt-1 text-center">

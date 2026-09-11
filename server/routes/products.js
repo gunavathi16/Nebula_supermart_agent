@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { db, runInTransaction } from '../db/database.js';
 import { authenticate } from '../middleware/auth.js';
+import { emptyStoreCatalog, seedDemoCatalog } from '../services/catalogService.js';
 
 const router = Router();
 
@@ -547,6 +548,27 @@ Match this photo against the store catalog. Return ONLY valid JSON in this exact
   } catch (err) {
     console.error('[Vision Server Route Error]:', err.message);
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Empty stock / catalog for clean market setup
+router.post('/empty-stock', authenticate, (req, res) => {
+  const { companyId, companyName } = req.body || {};
+  try {
+    const result = emptyStoreCatalog({ companyId, companyName });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to empty stock: ' + err.message });
+  }
+});
+
+// Restore sample demo catalog if desired
+router.post('/seed-demo', authenticate, (req, res) => {
+  try {
+    const result = seedDemoCatalog();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to seed demo catalog: ' + err.message });
   }
 });
 
