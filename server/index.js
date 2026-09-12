@@ -101,6 +101,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Kirana POS Backend Server listening on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Kirana POS Backend Server listening on http://0.0.0.0:${PORT}`);
 });
